@@ -1,0 +1,9 @@
+# ----- Python
+# Precompilati
+*.py[cod]
+# ----- Jasper 
+# Precompilati
+*.jasper
+# ----- Aeroo
+# Lock di Open/Libreoffice
+*.~lock*

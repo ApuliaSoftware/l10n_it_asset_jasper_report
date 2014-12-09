@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+    <!-- REPORT ASSET JOURNAL -->
+    <record id="report_asset_journal" model="ir.actions.report.xml">
+        <field name="name">Asset Journal</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">account.account.asset</field>
+        <field name="report_name">asset_journal</field>
+        <field name="report_rml">l10n_it_asset_jasper_report/report/asset_journal.jrxml</field>
+        <field name="report_type">pdf</field>
+        <field name="jasper_report">True</field>
+        <field name="jasper_output">pdf</field>
+    </record>
+
+</data>
+</openerp>

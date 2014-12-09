@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data>
+
+    <!-- ====================================================== -->
+    <!--                         WIZARD                         -->
+    <!-- ====================================================== -->
+    <record id="form_asset_journal" model="ir.ui.view">
+        <field name="name">form.asset.journal</field>
+        <field name="model">asset.journal.wz</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Print Asset Journal">
+                <field name="date"/>
+                <field name="fiscal_year"/>
+                <field name="asset_type"/>
+                <field name="cat_id"/>
+                <field name="first_page_number"/>
+                <field name="not_moved_too"/>
+                <group>
+                    <button string="Cancel" special="cancel"
+                        icon="gtk-cancel" colspan="2"/>
+                    <button string="Print" name="print_asset_journal"
+                        type="object" icon="gtk-ok" colspan="2"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- ====================================================== -->
+    <!--                         BUTTON                         -->
+    <!-- ====================================================== -->
+     <act_window name="Print Asset Journal"
+        view_mode="form"
+        target="new"
+        key2="client_print_multi"
+        res_model="asset.journal.wz"
+        src_model="account.asset.asset"
+        view_id= "form_asset_journal"
+        id="action_form_asset_journal"/>
+
+</data>
+</openerp>
