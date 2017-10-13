@@ -37,21 +37,29 @@
      account_asset_asset."first_use_year" AS account_asset_asset_first_use_year,
      account_fiscalyear."name" AS account_fiscalyear_name,
      account_fiscalyear."code" AS account_fiscalyear_code,
+     first_fiscalyear."name" AS first_fiscalyear_name,
+     first_fiscalyear."code" AS first_fiscalyear_code,
      res_partner."vat" AS res_partner_vat,
      res_partner."name" AS res_partner_name,
      res_partner."street" AS res_partner_street,
      res_partner."zip" AS res_partner_zip,
-     res_partner."city" AS res_partner_city
+     res_partner."city" AS res_partner_city,
+     first_fiscalyear."name" AS first_fiscalyear_name,
+     first_fiscalyear."code" AS first_fiscalyear_code,
+     lineap_asset."name" AS lineap_asset_name,
+     lineap_asset."code" AS lineap_asset_code
+
+
 FROM
      "public"."account_asset_category" account_asset_category INNER JOIN "public"."asset_journal_temp" asset_journal_temp ON account_asset_category."id" = asset_journal_temp."category_id"
      INNER JOIN "public"."account_asset_asset" account_asset_asset ON asset_journal_temp."asset_id" = account_asset_asset."id"
      INNER JOIN "public"."account_fiscalyear" account_fiscalyear ON asset_journal_temp."fiscal_year" = account_fiscalyear."id"
      INNER JOIN "public"."res_company" res_company ON account_fiscalyear."company_id" = res_company."id"
      INNER JOIN "public"."res_partner" res_partner ON res_company."partner_id" = res_partner."id"
-     INNER JOIN "public"."lineap_asset" lineap_asset ON lineap_asset."id" =
-account_asset_asset_lineap_id."id"
+     INNER JOIN "public"."account_fiscalyear" first_fiscalyear ON account_asset_asset."first_use_year" = first_fiscalyear."id"
+     left JOIN "public"."lineap_asset" lineap_asset ON account_asset_asset."lineap_id" = lineap_asset."id"
 ORDER BY
-     account_asset_category_name ASC]]>
+     account_asset_category_name ASC;]]>
 	</queryString>
 	<field name="asset_journal_temp_id" class="java.lang.Integer"/>
 	<field name="asset_journal_temp_first_page_number" class="java.lang.Double"/>
@@ -73,17 +81,21 @@ ORDER BY
 	<field name="asset_journal_temp_depreciated_value" class="java.lang.Double"/>
 	<field name="account_asset_category_code" class="java.lang.String"/>
 	<field name="account_asset_category_name" class="java.lang.String"/>
+	<field name="account_asset_asset_lineap_id" class="java.lang.Integer"/>
 	<field name="account_asset_asset_code" class="java.lang.String"/>
 	<field name="account_asset_asset_name" class="java.lang.String"/>
+	<field name="account_asset_asset_first_use_year" class="java.lang.Integer"/>
 	<field name="account_fiscalyear_name" class="java.lang.String"/>
 	<field name="account_fiscalyear_code" class="java.lang.String"/>
+	<field name="first_fiscalyear_name" class="java.lang.String"/>
+	<field name="first_fiscalyear_code" class="java.lang.String"/>
 	<field name="res_partner_vat" class="java.lang.String"/>
 	<field name="res_partner_name" class="java.lang.String"/>
 	<field name="res_partner_street" class="java.lang.String"/>
 	<field name="res_partner_zip" class="java.lang.String"/>
 	<field name="res_partner_city" class="java.lang.String"/>
-	<field name="account_asset_asset_first_use_year" class="java.lang.String"/>
-	<field name="account_asset_asset_lineap_id" class="java.lang.String"/>
+	<field name="lineap_asset_name" class="java.lang.String"/>
+	<field name="lineap_asset_code" class="java.lang.String"/>
 	<variable name="asset_journal_temp_purchase_value_1" class="java.lang.Double" resetType="Group" resetGroup="Categoria" calculation="Sum">
 		<variableExpression><![CDATA[$F{asset_journal_temp_purchase_value}]]></variableExpression>
 	</variable>
@@ -330,7 +342,7 @@ ORDER BY
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="13" splitType="Stretch">
+		<band height="39" splitType="Stretch">
 			<frame>
 				<reportElement style="Righe" x="0" y="0" width="579" height="13"/>
 			</frame>
@@ -403,6 +415,26 @@ ORDER BY
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Float"><![CDATA[$V{Ammortamento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="57" y="19" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[lineap_asset_code]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="157" y="19" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{lineap_asset_code}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="294" y="19" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[first_fiscalyear_code]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="394" y="19" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{first_fiscalyear_code}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="18">
