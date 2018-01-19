@@ -226,10 +226,30 @@ class asset_journal_temp(osv.osv_memory):
                     else:
                         if asset.remaining_value > 0.0 \
                                 and not asset.sale_date:
-                            raise osv.except_osv(
-                                _('Error'),
-                                _("Amortization not calculated for period \
-%s" % (asset.name)))
+                            vals = {
+                                'date': param.date,
+                                'fiscal_year': param.fiscal_year.id,
+                                'asset_type': param.asset_type,
+                                'cat_id': param.cat_id.id,
+                                'first_page_number': param.first_page_number,
+                                'not_moved_too': param.not_moved_too,
+                                'asset_id': asset.id,
+                                'category_id': asset.category_id.id,
+                                'deductibility': asset.deductibility,
+                                'purchase_date': asset.purchase_date,
+                                'purchase_value': asset.purchase_value,
+                                'value_residual': asset.value_residual,
+                                'type_amortization': asset.type_amortization,
+                                'perc_ammortization': perc,
+                                'depreciated_value': asset.value_residual,
+                                'amount': asset.amount,
+                                'remaining_value': asset.remaining_value,
+                                'sale_date': asset.sale_date,
+                            }
+#                            raise osv.except_osv(
+#                                _('Error'),
+#                                _("Amortization not calculated for period \
+#%s" % (asset.name)))
                         else:
                             perc=0.0
                             if asset.type_amortization == 'O':
