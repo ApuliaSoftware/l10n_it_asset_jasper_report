@@ -31,35 +31,23 @@
      asset_journal_temp."depreciated_value" AS asset_journal_temp_depreciated_value,
      account_asset_category."code" AS account_asset_category_code,
      account_asset_category."name" AS account_asset_category_name,
-     account_asset_asset."lineap_id" AS account_asset_asset_lineap_id,
      account_asset_asset."code" AS account_asset_asset_code,
      account_asset_asset."name" AS account_asset_asset_name,
-     account_asset_asset."first_use_year" AS account_asset_asset_first_use_year,
      account_fiscalyear."name" AS account_fiscalyear_name,
      account_fiscalyear."code" AS account_fiscalyear_code,
-     first_fiscalyear."name" AS first_fiscalyear_name,
-     first_fiscalyear."code" AS first_fiscalyear_code,
      res_partner."vat" AS res_partner_vat,
      res_partner."name" AS res_partner_name,
      res_partner."street" AS res_partner_street,
      res_partner."zip" AS res_partner_zip,
-     res_partner."city" AS res_partner_city,
-     first_fiscalyear."name" AS first_fiscalyear_name,
-     first_fiscalyear."code" AS first_fiscalyear_code,
-     lineap_asset."name" AS lineap_asset_name,
-     lineap_asset."code" AS lineap_asset_code
-
-
+     res_partner."city" AS res_partner_city
 FROM
      "public"."account_asset_category" account_asset_category INNER JOIN "public"."asset_journal_temp" asset_journal_temp ON account_asset_category."id" = asset_journal_temp."category_id"
      INNER JOIN "public"."account_asset_asset" account_asset_asset ON asset_journal_temp."asset_id" = account_asset_asset."id"
      INNER JOIN "public"."account_fiscalyear" account_fiscalyear ON asset_journal_temp."fiscal_year" = account_fiscalyear."id"
      INNER JOIN "public"."res_company" res_company ON account_fiscalyear."company_id" = res_company."id"
      INNER JOIN "public"."res_partner" res_partner ON res_company."partner_id" = res_partner."id"
-     left JOIN "public"."account_fiscalyear" first_fiscalyear ON account_asset_asset."first_use_year" = first_fiscalyear."id"
-     left JOIN "public"."lineap_asset" lineap_asset ON account_asset_asset."lineap_id" = lineap_asset."id"
 ORDER BY
-     account_asset_category_name ASC;]]>
+     account_asset_category_name ASC]]>
 	</queryString>
 	<field name="asset_journal_temp_id" class="java.lang.Integer"/>
 	<field name="asset_journal_temp_first_page_number" class="java.lang.Double"/>
@@ -81,21 +69,15 @@ ORDER BY
 	<field name="asset_journal_temp_depreciated_value" class="java.lang.Double"/>
 	<field name="account_asset_category_code" class="java.lang.String"/>
 	<field name="account_asset_category_name" class="java.lang.String"/>
-	<field name="account_asset_asset_lineap_id" class="java.lang.Integer"/>
 	<field name="account_asset_asset_code" class="java.lang.String"/>
 	<field name="account_asset_asset_name" class="java.lang.String"/>
-	<field name="account_asset_asset_first_use_year" class="java.lang.Integer"/>
 	<field name="account_fiscalyear_name" class="java.lang.String"/>
 	<field name="account_fiscalyear_code" class="java.lang.String"/>
-	<field name="first_fiscalyear_name" class="java.lang.String"/>
-	<field name="first_fiscalyear_code" class="java.lang.String"/>
 	<field name="res_partner_vat" class="java.lang.String"/>
 	<field name="res_partner_name" class="java.lang.String"/>
 	<field name="res_partner_street" class="java.lang.String"/>
 	<field name="res_partner_zip" class="java.lang.String"/>
 	<field name="res_partner_city" class="java.lang.String"/>
-	<field name="lineap_asset_name" class="java.lang.String"/>
-	<field name="lineap_asset_code" class="java.lang.String"/>
 	<variable name="asset_journal_temp_purchase_value_1" class="java.lang.Double" resetType="Group" resetGroup="Categoria" calculation="Sum">
 		<variableExpression><![CDATA[$F{asset_journal_temp_purchase_value}]]></variableExpression>
 	</variable>
@@ -161,17 +143,17 @@ ORDER BY
 		<groupFooter>
 			<band height="50">
 				<textField pattern="#,##0.00">
-					<reportElement x="242" y="11" width="75" height="13"/>
+					<reportElement x="236" y="11" width="75" height="13"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{asset_journal_temp_value_residual_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
-					<reportElement x="331" y="11" width="75" height="13"/>
+					<reportElement x="320" y="11" width="75" height="13"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{asset_journal_temp_depreciated_value_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
-					<reportElement x="406" y="11" width="57" height="13"/>
+					<reportElement x="394" y="11" width="57" height="13"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{asset_journal_temp_amount_1}]]></textFieldExpression>
 				</textField>
@@ -184,7 +166,7 @@ ORDER BY
 					<reportElement x="0" y="7" width="579" height="1"/>
 				</line>
 				<textField pattern="#,##0.00">
-					<reportElement x="451" y="11" width="70" height="13" isRemoveLineWhenBlank="true"/>
+					<reportElement x="447" y="11" width="70" height="13" isRemoveLineWhenBlank="true"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sommaamm}]]></textFieldExpression>
 				</textField>
@@ -253,7 +235,7 @@ ORDER BY
 				<text><![CDATA[% Ded.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="272" y="80" width="51" height="22"/>
+				<reportElement x="260" y="80" width="51" height="22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -267,14 +249,14 @@ ORDER BY
 				<text><![CDATA[Aliqu. %]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="369" y="80" width="40" height="22"/>
+				<reportElement x="348" y="80" width="40" height="22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Amm.to Prec.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="403" y="80" width="71" height="22"/>
+				<reportElement x="388" y="80" width="71" height="22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -288,7 +270,7 @@ ORDER BY
 				<text><![CDATA[Residuo da Ammortizzare]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="466" y="80" width="71" height="22"/>
+				<reportElement x="457" y="80" width="71" height="22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -326,25 +308,11 @@ ORDER BY
 				<reportElement x="0" y="107" width="579" height="1"/>
 			</line>
 			<staticText>
-				<reportElement x="197" y="80" width="53" height="22"/>
+				<reportElement x="205" y="80" width="53" height="22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Anno Acquisto]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="239" y="80" width="41" height="22"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Data 1° amm.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="343" y="80" width="24" height="22"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Linea]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -352,20 +320,6 @@ ORDER BY
 		<band height="13" splitType="Stretch">
 			<frame>
 				<reportElement style="Righe" x="0" y="0" width="579" height="13"/>
-				<textField>
-					<reportElement x="242" y="1" width="30" height="11"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{first_fiscalyear_code}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="341" y="1" width="27" height="11"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="5"/>
-					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{lineap_asset_code}]]></textFieldExpression>
-				</textField>
 			</frame>
 			<textField>
 				<reportElement x="0" y="0" width="74" height="13"/>
@@ -382,42 +336,42 @@ ORDER BY
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{account_asset_asset_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0;-###0">
-				<reportElement x="172" y="0" width="22" height="13"/>
+				<reportElement x="175" y="0" width="22" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{asset_journal_temp_deductibility}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="194" y="0" width="48" height="13"/>
+				<reportElement x="202" y="0" width="48" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{asset_journal_temp_purchase_date}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="259" y="0" width="57" height="13"/>
+				<reportElement x="256" y="0" width="57" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{asset_journal_temp_value_residual}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00;-###0.00">
-				<reportElement x="312" y="0" width="28" height="13"/>
+				<reportElement x="316" y="0" width="28" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{asset_journal_temp_perc_ammortization}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="403" y="0" width="57" height="13"/>
+				<reportElement x="398" y="0" width="57" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{asset_journal_temp_amount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="349" y="0" width="57" height="13"/>
+				<reportElement x="344" y="0" width="57" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -431,7 +385,7 @@ ORDER BY
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{asset_journal_temp_value_residual}-$F{asset_journal_temp_depreciated_value}-$F{asset_journal_temp_amount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="462" y="0" width="57" height="13"/>
+				<reportElement x="458" y="0" width="57" height="13"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
@@ -441,14 +395,14 @@ ORDER BY
 		<band height="18">
 			<printWhenExpression><![CDATA[$F{asset_journal_temp_sale_date}!=null]]></printWhenExpression>
 			<staticText>
-				<reportElement style="Righe" x="9" y="2" width="153" height="13"/>
+				<reportElement style="Righe" x="39" y="2" width="153" height="13"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Data Disattivazione Cespite]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement style="Righe" x="150" y="2" width="100" height="13"/>
+				<reportElement style="Righe" x="192" y="2" width="100" height="13"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -543,7 +497,7 @@ ORDER BY
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{asset_journal_temp_value_residual_2}-$V{asset_journal_temp_depreciated_value_2}-$V{asset_journal_temp_amount_2}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="487" y="0" width="90" height="29" isPrintInFirstWholeBand="true"/>
+				<reportElement x="483" y="0" width="90" height="29" isPrintInFirstWholeBand="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -564,14 +518,14 @@ ORDER BY
 				<text><![CDATA[Amm.to Prec.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="399" y="4" width="88" height="25"/>
+				<reportElement x="399" y="4" width="84" height="25"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Totale Ammortamenti]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="312" y="2" width="91" height="27"/>
+				<reportElement x="312" y="2" width="87" height="27"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="10" isBold="true"/>
 				</textElement>
