@@ -242,7 +242,7 @@ class asset_journal_temp(osv.osv_memory):
                                 'type_amortization': asset.type_amortization,
                                 'perc_ammortization': 0.0,
                                 'depreciated_value': asset.value_residual,
-                                'amount': asset.amount,
+                                'amount': 0.0, #asset.amount,
                                 'remaining_value': asset.remaining_value,
                                 'sale_date': asset.sale_date,
                             }
