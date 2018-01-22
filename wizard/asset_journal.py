@@ -60,6 +60,7 @@ class asset_journal_wz(osv.osv_memory):
                 cr, uid, [('asset_type', '=', param.asset_type)])
             if cat_ids:
                 filters.append(('category_id', 'in', cat_ids))
+        filters.append(('disattivato', '=', False))
         asset_ids = asset_obj.search(cr, uid, filters)
         if asset_ids:
             ok = self.pool.get('asset.journal.temp').crea_temp(cr, uid,
@@ -203,26 +204,49 @@ class asset_journal_temp(osv.osv_memory):
                             perc = asset.early_ammortization
                         if asset.type_amortization == 'P':
                             perc = asset.personal_ammortization
-                        vals = {
-                            'date': param.date,
-                            'fiscal_year': param.fiscal_year.id,
-                            'asset_type': param.asset_type,
-                            'cat_id': param.cat_id.id,
-                            'first_page_number': param.first_page_number,
-                            'not_moved_too': param.not_moved_too,
-                            'asset_id': asset.id,
-                            'category_id': asset.category_id.id,
-                            'deductibility': asset.deductibility,
-                            'purchase_date': asset.purchase_date,
-                            'purchase_value': asset.purchase_value,
-                            'value_residual': asset.value_residual,
-                            'type_amortization': asset.type_amortization,
-                            'perc_ammortization': perc,
-                            'depreciated_value': asset.value_residual,
-                            'amount': 0.0,
-                            'remaining_value': 0.0,
-                            'sale_date': asset.sale_date,
-                        }
+                        if asset.sale_date:
+                            vals = {
+                                'date': param.date,
+                                'fiscal_year': param.fiscal_year.id,
+                                'asset_type': param.asset_type,
+                                'cat_id': param.cat_id.id,
+                                'first_page_number': param.first_page_number,
+                                'not_moved_too': param.not_moved_too,
+                                'asset_id': asset.id,
+                                'category_id': asset.category_id.id,
+                                'deductibility': asset.deductibility,
+                                'purchase_date': asset.purchase_date,
+                                'purchase_value': asset.purchase_value,
+                                'value_residual': 0.0, #asset.value_residual,
+                                'type_amortization': asset.type_amortization,
+                                'perc_ammortization': perc,
+                                'depreciated_value': 0.0, #asset.value_residual,
+                                'amount': 0.0,
+                                'remaining_value': 0.0,
+                                'sale_date': asset.sale_date,
+                            }
+
+                        else:
+                            vals = {
+                                'date': param.date,
+                                'fiscal_year': param.fiscal_year.id,
+                                'asset_type': param.asset_type,
+                                'cat_id': param.cat_id.id,
+                                'first_page_number': param.first_page_number,
+                                'not_moved_too': param.not_moved_too,
+                                'asset_id': asset.id,
+                                'category_id': asset.category_id.id,
+                                'deductibility': asset.deductibility,
+                                'purchase_date': asset.purchase_date,
+                                'purchase_value': asset.purchase_value,
+                                'value_residual': asset.value_residual,
+                                'type_amortization': asset.type_amortization,
+                                'perc_ammortization': perc,
+                                'depreciated_value': asset.value_residual,
+                                'amount': 0.0,
+                                'remaining_value': 0.0,
+                                'sale_date': asset.sale_date,
+                            }
                     else:
                         if asset.remaining_value > 0.0 \
                                 and not asset.sale_date:
