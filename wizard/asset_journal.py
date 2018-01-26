@@ -44,6 +44,8 @@ class asset_journal_wz(osv.osv_memory):
                                           'Asset Category'),
                 'first_page_number': fields.float('From Page'),
                 'not_moved_too': fields.boolean('Assets without Moves'),
+                'lineap_id': fields.many2one('lineap.asset', 'Linea'),
+                'sede_id': fields.many2one('asset.sedi', 'Sede'),
                 }
 
     _defaults = {'asset_type': 'A'}
@@ -55,6 +57,10 @@ class asset_journal_wz(osv.osv_memory):
         data = {}
         if param.cat_id:
             filters.append(('category_id', '=', param.cat_id.id))
+        if param.lineap_id:
+            filters.append(('lineap_id', '=', param.lineap_id.id))
+        if param.sede_id:
+            filters.append(('sede_id', '=', param.sede_id.id))
         if param.asset_type != 'A':
             cat_ids = self.pool.get('account.asset.category').search(
                 cr, uid, [('asset_type', '=', param.asset_type)])
@@ -136,6 +142,9 @@ class asset_journal_temp(osv.osv_memory):
                     'Next Period Depreciation',
                     digits_compute=dp.get_precision('Account')),
                 'sale_date': fields.date('Sale Date'),
+                'lineap_id': fields.many2one('lineap.asset', 'Linea'),
+                'sede_id': fields.many2one('asset.sedi', 'Sede'),
+
                 }
 
     def _pulisci(self, cr, uid, context=None):

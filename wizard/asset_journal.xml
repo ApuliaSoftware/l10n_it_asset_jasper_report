@@ -12,12 +12,16 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Print Asset Journal">
+                <group>
                 <field name="date"/>
                 <field name="fiscal_year"/>
                 <field name="asset_type"/>
                 <field name="cat_id"/>
                 <field name="first_page_number"/>
                 <field name="not_moved_too"/>
+                    <field name="lineap_id"/>
+                    <field name="sede_id"/>
+                </group>
                 <group>
                     <button string="Cancel" special="cancel"
                         icon="gtk-cancel" colspan="2"/>
