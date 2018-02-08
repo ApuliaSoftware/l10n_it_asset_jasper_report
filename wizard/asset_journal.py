@@ -315,7 +315,7 @@ class asset_journal_temp(osv.osv_memory):
                             }
                 if vals:
                     vals={
-                        'lineap_id': asset.linea_id.id or False,
+                        'lineap_id': asset.lineap_id.id or False,
                         'sede_id': asset.sede_id.id or False,
 
                     }
