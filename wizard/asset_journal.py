@@ -314,8 +314,8 @@ class asset_journal_temp(osv.osv_memory):
                                 'sale_date': asset.sale_date,
                             }
                 if vals:
-                    vals['lineap_id'] = asset.lineap_id.id or False
-                    vals['sede_id'] = asset.sede_id.id or False
+                    # vals['lineap_id'] = asset.lineap_id.id or False
+                    # vals['sede_id'] = asset.sede_id.id or False
                     self.create(cr, uid, vals)
                     ok = True
         return ok
