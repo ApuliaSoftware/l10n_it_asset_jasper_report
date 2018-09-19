@@ -166,14 +166,17 @@ class asset_journal_temp(osv.osv_memory):
                 ('fiscal_year', '=', param.fiscal_year.id)])
             id_line_invoice = invoice_lineobj.search(cr, uid, [
                 ('asset_id', '=', asset.id),
-                ('date_invoice', '>=', param.fiscal_year.date_start),
+                # ('date_invoice', '>=', param.fiscal_year.date_start),
                 ('date_invoice', '<=', param.fiscal_year.date_stop)])
             if not id_line_dep and not id_line_invoice \
                     and not param.not_moved_too:
                 print_asset = False
             if not id_line_dep and not id_line_invoice \
                     and param.not_moved_too:
-                print_asset = True
+                if asset.purchase_date <= param.fiscal_year.date_stop:
+                    print_asset = True
+                else:
+                    print_asset = False
             if id_line_dep or id_line_invoice:
                 print_asset = True
             if print_asset:
