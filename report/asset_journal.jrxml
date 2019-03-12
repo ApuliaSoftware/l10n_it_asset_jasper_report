@@ -171,7 +171,7 @@ ORDER BY
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{asset_journal_temp_depreciated_value_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
-					<reportElement x="406" y="11" width="57" height="13"/>
+					<reportElement x="402" y="11" width="60" height="13"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{asset_journal_temp_amount_1}]]></textFieldExpression>
 				</textField>
@@ -184,7 +184,7 @@ ORDER BY
 					<reportElement x="0" y="7" width="579" height="1"/>
 				</line>
 				<textField pattern="#,##0.00">
-					<reportElement x="451" y="11" width="70" height="13" isRemoveLineWhenBlank="true"/>
+					<reportElement x="453" y="11" width="70" height="13" isRemoveLineWhenBlank="true"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sommaamm}]]></textFieldExpression>
 				</textField>
