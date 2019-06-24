@@ -123,7 +123,7 @@ class asset_journal_temp(osv.osv_memory):
                 'purchase_date': fields.date('Purchase Date'),
                 'purchase_value': fields.float('Gross Value'),
                 'value_residual': fields.float('Residual Value'),
-                'asset_value_residual' : fields.float('Asset Residual Value'),
+               # 'asset_value_residual': fields.float('Asset Residual Value'),
                 'type_amortization': fields.selection(
                     (('O', 'ordinary'),
                      ('F', 'firs year reduction'),
@@ -198,7 +198,7 @@ class asset_journal_temp(osv.osv_memory):
                         'purchase_date': asset.purchase_date,
                         'purchase_value': asset.purchase_value,
                         'value_residual': line_dep.amount + line_dep.remaining_value,
-                        'asset_value_residual': asset.value_residual,
+                       # 'asset_value_residual': asset.value_residual,
                         'type_amortization': line_dep.type_amortization,
                         'perc_ammortization': line_dep.perc_ammortization,
                         'depreciated_value': line_dep.depreciated_value,

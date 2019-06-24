@@ -37,6 +37,6 @@
         'report.xml',
         'wizard/asset_journal.xml',
         ],
-    "active": False,
+    "active": True,
     "installable": True,
 }
