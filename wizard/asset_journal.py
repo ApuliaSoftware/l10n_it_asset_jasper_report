@@ -114,8 +114,9 @@ class asset_journal_wz(osv.osv_memory):
                 filters.append(('category_id', 'in', cat_ids))
         filters.append(('disattivato', '=', False))
         asset_ids = asset_obj.search(cr, uid, filters)
+        #import pdb;pdb.set_trace()
         if asset_ids:
-            ok = self.pool.get('asset.journal.temp').crea_temp(cr, uid,
+            ok = self.pool.get('asset.registro.temp').crea_temp(cr, uid,
                                                                asset_ids,
                                                                param)
             if ok:
@@ -142,6 +143,7 @@ class asset_journal_wz(osv.osv_memory):
                 'datas': data,
                 }
 
+asset_journal_wz()
 
 class asset_journal_temp(osv.osv_memory):
 
@@ -331,10 +333,6 @@ class asset_journal_temp(osv.osv_memory):
                                 'remaining_value': asset.remaining_value,
                                 'sale_date': asset.sale_date,
                             }
-#                            raise osv.except_osv(
-#                                _('Error'),
-#                                _("Amortization not calculated for period \
-#%s" % (asset.name)))
                         else:
                             perc=0.0
                             if asset.type_amortization == 'O':
@@ -372,6 +370,9 @@ class asset_journal_temp(osv.osv_memory):
                     ok = True
         return ok
 
+asset_journal_temp()
+
+
 class asset_registro_temp(osv.osv_memory):
 
     _name = 'asset.registro.temp'
@@ -402,6 +403,7 @@ class asset_registro_temp(osv.osv_memory):
                                                'Categoria Cespite'),
                 'purchase_date': fields.date('Purchase Date'),
                 'purchase_value': fields.float('Gross Value'),
+                'deductibility': fields.float('Deducibilita'),
                 'sale_date': fields.date('Sale Date'),
                 'im_non_amm': fields.float('Importo non Ammortizzabile'),
                 'in_perc_amm': fields.float('Perc.Amm.to ini'),
@@ -425,6 +427,18 @@ class asset_registro_temp(osv.osv_memory):
                 'numdoc': fields.char('Numero Documento', size=20),
                 'data_doc': fields.date('Data Documento'),
                 'importo': fields.float('Importo'),
+                'fi_perc_amm': fields.float('Perc.Amm.to fin'),
+                'fi_type_amortization': fields.char('Tipo Ammortamento fin', size=20),
+                'fi_valbene': fields.float('Inc.Val.Bene fin'),
+                'fi_spese': fields.float('Oneri e Spese fin'),
+                'fi_rival': fields.float('Rivalutazioni Fin'),
+                'fi_sival': fields.float('Svalutazioni Fin'),
+                'fi_decval': fields.float('Dec.Val.Bene Fin'),
+                'fi_fdoammord': fields.float('F.do Amm.to Ord. Fin'),
+                'fi_fdoammant': fields.float('F.do Amm.to Ant. Fin'),
+                'fi_quoper': fields.float('Quate Perse Fin'),
+                'fi_resam': fields.float('Residuo da Amm. Fin'),
+
                 }
     _order = "category_id,asset_id,data_reg"
 
@@ -432,11 +446,11 @@ class asset_registro_temp(osv.osv_memory):
         last_year = False
         fiscalyear_obj = self.pool.get('account.fiscalyear')
         dtp = param.fiscal_year.date_stop
-        anno = str(int(dt[:4])-1)
+        anno = str(int(dtp[:4])-1)
         dt = anno + dtp[4:]
         last_year_ids = fiscalyear_obj.find(cr,uid,dt=dt)
         if last_year_ids:
-            last_year = fiscalyear_obj.browse(cr,uid,last_year_ids[0])
+            last_year = fiscalyear_obj.browse(cr,uid,last_year_ids)
         return last_year
 
     def crea_temp(self, cr, uid, ids, param, context=None):
@@ -444,11 +458,10 @@ class asset_registro_temp(osv.osv_memory):
         asset_dep_lineobj = self.pool.get('account.asset.depreciation.line')
         invoice_lineobj = self.pool.get('account.invoice.line')
         move_lineobj =  self.pool.get('account.move.line')
-        total_obj = self.pool.get('asset.registro.total.temp')
-        ok = total_obj._pulisci(cr,uid,context)
         last_year = self.find_last_year(cr,uid,ids,param)
         ok = self._pulisci(cr, uid, context)
-        ok = False
+        ok = True
+
         if not ids:
             return False
         for asset in asset_obj.browse(cr, uid, ids):
@@ -479,8 +492,11 @@ class asset_registro_temp(osv.osv_memory):
                 print_asset = True
             if print_asset:
                 # calcolo lo stato del cespite
+                #import pdb;
+                #pdb.set_trace()
+                stato = ''
                 if asset.value_residual != 0.0 and\
-                     asset.accumulated_depreciation != 0.0 and\
+                     asset.accumulated_depreciation == 0.0 and\
                      asset.remaining_value == asset.value_residual:
                     stato = 'new'
                 if asset.value_residual != 0.0 and\
@@ -494,14 +510,12 @@ class asset_registro_temp(osv.osv_memory):
                     stato = 'ended'
                 if not id_line_dep and stato in ('new', 'doing'):
                     if stato == 'doing':
-                        raise orm.except_orm(
-                            'Errore',
-                            'al cespite '+ asset.code+ ' manca l ammortamento per il periodo richiesto')
+                        raise osv.except_osv(_('ERRORE !'),
+                                             _('al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto'))
                     if stato == 'new':
                         if param.fiscal_year.id == asset.first_use_year.id:
-                            raise orm.except_orm(
-                                'Errore',
-                                'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto')
+                            raise osv.except_osv(_('ERRORE !'),
+                                                 _('al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto'))
                 testa_rec = {
                     'date': param.date,
                     'fiscal_year': param.fiscal_year.id,
@@ -549,7 +563,7 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['fi_valbene'] = line_dep.amount+line_dep.remaining_value
                     testa_rec['fi_perc_amm'] = line_dep.perc_ammortization
                     testa_rec['fi_fdoammord'] = line_dep.amount
-                    testa_rec['fi_type_amortization'] = last_line_dep.type_amortization
+                    testa_rec['fi_type_amortization'] = line_dep.type_amortization
                 else:
                     testa_rec['fi_valbene'] = asset.value_residual
                     testa_rec['fi_perc_amm'] = 0
@@ -562,13 +576,13 @@ class asset_registro_temp(osv.osv_memory):
                     for line in invoice_lineobj.browse(cr,uid,id_line_invoice):
                         mv['inv_line_id'] = line.id
                         mv['move_line_id'] = False
-                        mv['data_reg'] = line.invoce_id.data_registrazione
-                        mv['data_doc'] = line.invoce_id.date_invoice
-                        mv['numdoc'] = line.invoce_id.supplier_invoice_number or line.invoce_id.number
-                        mv['journal_id'] = line.invoce_id.journal_id.id
-                        mv['partner_id'] = line.invoce_id.partner_id.id
+                        mv['data_reg'] = line.invoice_id.registration_date
+                        mv['data_doc'] = line.invoice_id.date_invoice
+                        mv['numdoc'] = line.invoice_id.supplier_invoice_number or line.invoice_id.number
+                        mv['journal_id'] = line.invoice_id.journal_id.id
+                        mv['partner_id'] = line.invoice_id.partner_id.id
                         mv['importo'] = line.price_subtotal
-                        if line.invoce_id.type in ('out_invoice', 'in_refund'):
+                        if line.invoice_id.type in ('out_invoice', 'in_refund'):
                             # deve decrementare il valore del bene
                             importo = line.price_subtotal * -1
                         else:
@@ -583,7 +597,7 @@ class asset_registro_temp(osv.osv_memory):
                     pass
                 if asset.account_move_line_ids:
                     for move_line in asset.account_move_line_ids:
-                        if move_line.move_id.fiscal_year_id.id == param.fiscal_year.id:
+                        if move_line.move_id.period_id.fiscalyear_id.id == param.fiscal_year.id:
                             mv['inv_line_id'] = False
                             mv['move_line_id'] = move_line.id
                             mv['data_reg'] = move_line.date
@@ -601,6 +615,7 @@ class asset_registro_temp(osv.osv_memory):
                     record = testa_rec
                     self.create(cr, uid, record)
 
+        return ok
 # class asset_registro_total_temp(osv.osv_memory):
 #
 #     _name = 'asset.registro.total.temp'

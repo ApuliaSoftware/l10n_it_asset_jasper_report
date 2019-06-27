@@ -32,10 +32,11 @@
     "depends" : [
         'l10n_it_asset',
         'jasper_reports',
+        'account_asset_omaf'
         ],
     "update_xml" : [
-        'report.xml',
-        'wizard/asset_journal.xml',
+       'report.xml',
+       'wizard/asset_journal.xml',
         ],
     "active": True,
     "installable": True,
