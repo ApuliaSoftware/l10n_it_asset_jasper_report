@@ -574,6 +574,7 @@ class asset_registro_temp(osv.osv_memory):
                 if id_line_invoice:
                     # ci sono delle fatture nell'anno indicato
                     for line in invoice_lineobj.browse(cr,uid,id_line_invoice):
+                        mv = {}
                         mv['inv_line_id'] = line.id
                         mv['move_line_id'] = False
                         mv['data_reg'] = line.invoice_id.registration_date
@@ -597,6 +598,7 @@ class asset_registro_temp(osv.osv_memory):
                     pass
                 if asset.account_move_line_ids:
                     for move_line in asset.account_move_line_ids:
+                        mv = {}
                         if move_line.move_id.period_id.fiscalyear_id.id == param.fiscal_year.id:
                             mv['inv_line_id'] = False
                             mv['move_line_id'] = move_line.id
