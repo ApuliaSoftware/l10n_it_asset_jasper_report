@@ -15,7 +15,7 @@
     </record>
 
     <!-- registro Cespiti -->
-    <record id="report_asset_journal" model="ir.actions.report.xml">
+    <record id="report_registro_cespiti" model="ir.actions.report.xml">
         <field name="name">Registro Cespiti</field>
         <field name="type">ir.actions.report.xml</field>
         <field name="model">account.account.asset</field>
