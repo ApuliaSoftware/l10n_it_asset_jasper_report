@@ -18,7 +18,7 @@
     <record id="report_registro_cespiti" model="ir.actions.report.xml">
         <field name="name">Registro Cespiti</field>
         <field name="type">ir.actions.report.xml</field>
-        <field name="model">account.account.asset</field>
+        <field name="model">asset.registro.temp</field>
         <field name="report_name">RegistroCespiti</field>
         <field name="report_rml">l10n_it_asset_jasper_report/report/RegistroCespiti.jrxml</field>
         <field name="report_type">pdf</field>

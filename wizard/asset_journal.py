@@ -138,7 +138,7 @@ class asset_journal_wz(osv.osv_memory):
         data['model'] = context.get('active_model', 'ir.ui.menu')
         data['form'] = {}
         return {'type': 'ir.actions.report.xml',
-                'report_name': 'asset_journal',
+                'report_name': 'RegistroCespiti',
                 'datas': data,
                 }
 
@@ -596,6 +596,11 @@ class asset_registro_temp(osv.osv_memory):
                     # non ci sono fatture per il periodo
                     pass
                 if asset.account_move_line_ids:
+                    testa_rec['partner_id'] = False
+                    testa_rec['data_doc'] = False
+                    testa_rec['numdoc'] = False
+                    # if asset.code == 'AS/000007':
+                    #     import pdb;pdb.set_trace()
                     for move_line in asset.account_move_line_ids:
                         mv = {}
                         if move_line.move_id.period_id.fiscalyear_id.id == param.fiscal_year.id:
@@ -604,10 +609,10 @@ class asset_registro_temp(osv.osv_memory):
                             mv['data_reg'] = move_line.date
                             mv['journal_id'] = move_line.journal_id.id
                             mv['importo'] = move_line.debit
-                        record = testa_rec
-                        record.update(mv)
-                        self.create(cr, uid, record)
-                        not_write = False
+                            record = testa_rec
+                            record.update(mv)
+                            self.create(cr, uid, record)
+                            not_write = False
                 else:
                     # non ci sono movimenti per il periodo
                     pass
