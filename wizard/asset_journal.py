@@ -131,7 +131,6 @@ class asset_journal_wz(osv.osv_memory):
         return {'type': 'ir.actions.act_window_close'}
 
     def _print_registro_report(self, cr, uid, ids, data, parametri, context=None):
-        return True
         if context is None:
             context = {}
         data = {}
@@ -175,7 +174,7 @@ class asset_journal_temp(osv.osv_memory):
                # 'asset_value_residual': fields.float('Asset Residual Value'),
                 'type_amortization': fields.selection(
                     (('O', 'ordinary'),
-                     ('F', 'firs year reduction'),
+                     ('F', 'first year reduction'),
                      ('A', 'advance'),
                      ('R', 'reduced'),
                      ('P', 'personal')),
