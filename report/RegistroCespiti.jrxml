@@ -6,6 +6,7 @@
 	<queryString>
 		<![CDATA[SELECT
   account_asset_asset.code,
+  account_asset_asset.purchase_value,
   account_asset_asset.name AS ASSET_NAME,
   account_asset_category.name AS CATNAME,
   res_partner.ref,
@@ -51,6 +52,7 @@ FROM
 ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_temp.data_reg;]]>
 	</queryString>
 	<field name="code" class="java.lang.String"/>
+	<field name="purchase_value" class="java.lang.Double"/>
 	<field name="asset_name" class="java.lang.String"/>
 	<field name="catname" class="java.lang.String"/>
 	<field name="ref" class="java.lang.String"/>
@@ -85,7 +87,6 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 	<field name="ese_disatt" class="java.lang.String"/>
 	<field name="in_fdoammord" class="java.lang.Double"/>
 	<field name="move_line_id" class="java.lang.Integer"/>
-	<field name="purchase_value" class="java.lang.Double"/>
 	<field name="data_reg" class="java.sql.Date"/>
 	<field name="in_spese" class="java.lang.Double"/>
 	<field name="sede_id" class="java.lang.Integer"/>
@@ -103,6 +104,10 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 	<field name="fi_fdoammord" class="java.lang.Double"/>
 	<field name="fi_decval" class="java.lang.Double"/>
 	<field name="deductibility" class="java.lang.Double"/>
+	<variable name="ResiduoIniziale" class="java.lang.String" resetType="None">
+		<variableExpression><![CDATA[$F{purchase_value}-$F{in_fdoammord}]]></variableExpression>
+	</variable>
+	<variable name="ResiduoFinale" class="java.lang.String"/>
 	<group name="Categoria" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{catname}]]></groupExpression>
 		<groupHeader>
@@ -212,12 +217,27 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
 					<text><![CDATA[Ammortamento]]></text>
 				</staticText>
+				<textField>
+					<reportElement x="348" y="15" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$F{purchase_value}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="508" y="49" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{purchase_value}-$F{in_fdoammord}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="643" y="47" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$V{ResiduoIniziale}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
 			<band height="73">
 				<rectangle>
-					<reportElement x="9" y="10" width="499" height="51" backcolor="#CCCCCC"/>
+					<reportElement x="9" y="10" width="747" height="51" backcolor="#CCCCCC"/>
 				</rectangle>
 				<textField pattern="###0.00;-###0.00">
 					<reportElement x="148" y="38" width="100" height="12"/>
@@ -253,7 +273,7 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 				</staticText>
 				<staticText>
 					<reportElement x="145" y="26" width="100" height="12"/>
-					<textElement verticalAlignment="Bottom"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
 					<text><![CDATA[Valore da Ammo.	]]></text>
 				</staticText>
 				<staticText>
