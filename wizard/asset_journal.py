@@ -142,6 +142,30 @@ class asset_journal_wz(osv.osv_memory):
                 'datas': data,
                 }
 
+
+    def correggi_2016(self, cr, uid, ids, context=None):
+        print 'Inizio controllo'
+        param = self.browse(cr, uid, ids[0])
+        #asset_obj = self.pool.get('account.asset.asset')
+        asset_dep_lineobj = self.pool.get('account.asset.depreciation.line')
+        if not ids:
+            return {'type': 'ir.actions.act_window_close'}
+        if param.fiscal_year.code != '2016':
+            raise osv.except_osv(_('Errore'),
+                                 _("Periodo Errato"))
+            return {'type': 'ir.actions.act_window_close'}
+        id_line_dep = asset_dep_lineobj.search(cr, uid, [
+            ('fiscal_year', '=', param.fiscal_year.id)])
+        for line in asset_dep_lineobj.browse(cr, uid,id_line_dep):
+            asset_dep_lineobj.write(cr, uid, [line.id],{
+                'remaining_value': line.asset_id.purchase_value - line.depreciated_value
+            })
+            print line.asset_id.code, line.asset_id.purchase_value - line.depreciated_value
+
+
+        return {'type': 'ir.actions.act_window_close'}
+
+
 asset_journal_wz()
 
 class asset_journal_temp(osv.osv_memory):
@@ -646,23 +670,3 @@ class asset_registro_temp(osv.osv_memory):
 #         'fi_quoper': fields.float('Quate Perse Fin'),
 #         'fi_resam': fields.float('Residuo da Amm. Fin'),
 #     }
-    def correggi_2016(self, cr, uid, ids, param, context=None):
-        print 'Inizio controllo'
-        asset_obj = self.pool.get('account.asset.asset')
-        asset_dep_lineobj = self.pool.get('account.asset.depreciation.line')
-        if not ids:
-            return {'type': 'ir.actions.act_window_close'}
-        if param.fiscal_year.code != '2016':
-            raise osv.except_osv(_('Errore'),
-                                 _("Periodo Errato"))
-            return {'type': 'ir.actions.act_window_close'}
-        id_line_dep = asset_dep_lineobj.search(cr, uid, [
-            ('fiscal_year', '=', param.fiscal_year.id)])
-        for line in asset_dep_lineobj.browse(cr, uid,id_line_dep):
-            asset_dep_lineobj.write(cr, uid, [line.id],{
-                'remaining_value': line.asset_id.purchase_value - line.depreciated_value
-            })
-            print line.asset_id.code, line.asset_id.purchase_value - line.depreciated_value
-
-
-        return {'type': 'ir.actions.act_window_close'}
