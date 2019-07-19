@@ -181,7 +181,10 @@ class asset_journal_wz(osv.osv_memory):
         id_line_dep = asset_dep_lineobj.search(cr, uid, [
             ('fiscal_year', '=', param.fiscal_year.id)])
         for line in asset_dep_lineobj.browse(cr, uid, id_line_dep):
-            value_residual = line.amount + line.remaining_value
+            if line.remaining_value == 0.0:
+                value_residual = line.amount + line.depreciated_value
+            else:
+                value_residual = line.amount + line.remaining_value
             remaining_value = value_residual - line.amount - line.depreciated_value
             asset_dep_lineobj.write(cr, uid, [line.id], {
                 'remaining_value':remaining_value,
