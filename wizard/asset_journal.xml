@@ -31,6 +31,8 @@
                         type="object" icon="gtk-ok" colspan="2"/>
                     <button string="Correggi 2016" name="correggi_2016"
                         type="object" icon="gtk-ok" colspan="2"/>
+                    <button string="Correggi Anni Successivi" name="correggi_2016"
+                        type="object" icon="gtk-ok" colspan="2"/>
 
                 </group>
             </form>

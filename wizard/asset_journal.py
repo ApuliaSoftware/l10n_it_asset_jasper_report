@@ -165,6 +165,34 @@ class asset_journal_wz(osv.osv_memory):
 
         return {'type': 'ir.actions.act_window_close'}
 
+    def correggi_anni_successivi(self, cr, uid, ids, context=None):
+        ## su ogni riga ricalcola il valore di partenza prendendo il valore residuo e sommandoci
+        ## dentro l'ammortamento dell'anno poi ricalcola il valore residuo prendendo il
+        ## nuovo valore iniziale e togliendo l'ammortamento precedente e quello in corso
+        ## dovrebbe funzionare
+        print 'Inizio controllo'
+        param = self.browse(cr, uid, ids[0])
+        #asset_obj = self.pool.get('account.asset.asset')
+        asset_dep_lineobj = self.pool.get('account.asset.depreciation.line')
+        if not ids:
+            return {'type': 'ir.actions.act_window_close'}
+        if param.fiscal_year.code == '2016':
+            raise osv.except_osv(_('Errore'),
+                                 _("Periodo Errato"))
+            return {'type': 'ir.actions.act_window_close'}
+        id_line_dep = asset_dep_lineobj.search(cr, uid, [
+            ('fiscal_year', '=', param.fiscal_year.id)])
+        for line in asset_dep_lineobj.browse(cr, uid,id_line_dep):
+            value_residual = line.amount + line.remaining_value
+            remaining_value = value_residual - line.amount - line.depreciated_value
+            asset_dep_lineobj.write(cr, uid, [line.id],{
+                'remaining_value': remaining_value,
+                'value_residual': value_residual
+            })
+            print line.asset_id.code, remaining_value, value_residual
+
+
+        return {'type': 'ir.actions.act_window_close'}
 
 asset_journal_wz()
 
