@@ -26,29 +26,28 @@ import openerp.addons.decimal_precision as dp
 
 
 class asset_journal_wz(osv.osv_memory):
-
     _name = "asset.journal.wz"
     _description = "Parametri Stampa Libro Cespiti"
 
-    _columns = {'date': fields.date('Print Date', required=True),
-                'fiscal_year': fields.many2one('account.fiscalyear',
-                                               'Period to Print',
-                                               required=True),
-                'asset_type': fields.selection(
+    _columns = {'date':fields.date('Print Date', required=True),
+                'fiscal_year':fields.many2one('account.fiscalyear',
+                                              'Period to Print',
+                                              required=True),
+                'asset_type':fields.selection(
                     (('M', 'Material asset'),
                      ('I', 'Intangible asset'),
                      ('P', 'Capital gain'),
                      ('A', 'All')),
                     'Type'),
-                'cat_id': fields.many2one('account.asset.category',
-                                          'Asset Category'),
-                'first_page_number': fields.float('From Page'),
-                'not_moved_too': fields.boolean('Assets without Moves'),
-                'lineap_id': fields.many2one('lineap.asset', 'Linea'),
-                'sede_id': fields.many2one('asset.sedi', 'Sede'),
+                'cat_id':fields.many2one('account.asset.category',
+                                         'Asset Category'),
+                'first_page_number':fields.float('From Page'),
+                'not_moved_too':fields.boolean('Assets without Moves'),
+                'lineap_id':fields.many2one('lineap.asset', 'Linea'),
+                'sede_id':fields.many2one('asset.sedi', 'Sede'),
                 }
 
-    _defaults = {'asset_type': 'A'}
+    _defaults = {'asset_type':'A'}
 
     def print_asset_journal(self, cr, uid, ids, context=None):
         asset_obj = self.pool['account.asset.asset']
@@ -81,7 +80,7 @@ class asset_journal_wz(osv.osv_memory):
         else:
             raise osv.except_osv(_('Error'),
                                  _("No data to print"))
-        return {'type': 'ir.actions.act_window_close'}
+        return {'type':'ir.actions.act_window_close'}
 
     def _print_report(self, cr, uid, ids, data, parametri, context=None):
         if context is None:
@@ -90,11 +89,10 @@ class asset_journal_wz(osv.osv_memory):
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
         data['form'] = {}
-        return {'type': 'ir.actions.report.xml',
-                'report_name': 'asset_journal',
-                'datas': data,
+        return {'type':'ir.actions.report.xml',
+                'report_name':'asset_journal',
+                'datas':data,
                 }
-
 
     def print_registro(self, cr, uid, ids, context=None):
         asset_obj = self.pool['account.asset.asset']
@@ -114,21 +112,21 @@ class asset_journal_wz(osv.osv_memory):
                 filters.append(('category_id', 'in', cat_ids))
         filters.append(('disattivato', '=', False))
         asset_ids = asset_obj.search(cr, uid, filters)
-        #import pdb;pdb.set_trace()
+        # import pdb;pdb.set_trace()
         if asset_ids:
             ok = self.pool.get('asset.registro.temp').crea_temp(cr, uid,
-                                                               asset_ids,
-                                                               param)
+                                                                asset_ids,
+                                                                param)
             if ok:
                 return self._print_registro_report(cr, uid, ids, data, param,
-                                          context=context)
+                                                   context=context)
             else:
                 raise osv.except_osv(_('Error'),
                                      _("No data to print"))
         else:
             raise osv.except_osv(_('Error'),
                                  _("No data to print"))
-        return {'type': 'ir.actions.act_window_close'}
+        return {'type':'ir.actions.act_window_close'}
 
     def _print_registro_report(self, cr, uid, ids, data, parametri, context=None):
         if context is None:
@@ -137,33 +135,31 @@ class asset_journal_wz(osv.osv_memory):
         data['ids'] = context.get('active_ids', [])
         data['model'] = context.get('active_model', 'ir.ui.menu')
         data['form'] = {}
-        return {'type': 'ir.actions.report.xml',
-                'report_name': 'RegistroCespiti',
-                'datas': data,
+        return {'type':'ir.actions.report.xml',
+                'report_name':'RegistroCespiti',
+                'datas':data,
                 }
-
 
     def correggi_2016(self, cr, uid, ids, context=None):
         print 'Inizio controllo'
         param = self.browse(cr, uid, ids[0])
-        #asset_obj = self.pool.get('account.asset.asset')
+        # asset_obj = self.pool.get('account.asset.asset')
         asset_dep_lineobj = self.pool.get('account.asset.depreciation.line')
         if not ids:
-            return {'type': 'ir.actions.act_window_close'}
+            return {'type':'ir.actions.act_window_close'}
         if param.fiscal_year.code != '2016':
             raise osv.except_osv(_('Errore'),
                                  _("Periodo Errato"))
-            return {'type': 'ir.actions.act_window_close'}
+            return {'type':'ir.actions.act_window_close'}
         id_line_dep = asset_dep_lineobj.search(cr, uid, [
             ('fiscal_year', '=', param.fiscal_year.id)])
-        for line in asset_dep_lineobj.browse(cr, uid,id_line_dep):
-            asset_dep_lineobj.write(cr, uid, [line.id],{
-                'remaining_value': line.asset_id.purchase_value - line.depreciated_value
+        for line in asset_dep_lineobj.browse(cr, uid, id_line_dep):
+            asset_dep_lineobj.write(cr, uid, [line.id], {
+                'remaining_value':line.asset_id.purchase_value - line.depreciated_value
             })
             print line.asset_id.code, line.asset_id.purchase_value - line.depreciated_value
 
-
-        return {'type': 'ir.actions.act_window_close'}
+        return {'type':'ir.actions.act_window_close'}
 
     def correggi_anni_successivi(self, cr, uid, ids, context=None):
         ## su ogni riga ricalcola il valore di partenza prendendo il valore residuo e sommandoci
@@ -172,79 +168,79 @@ class asset_journal_wz(osv.osv_memory):
         ## dovrebbe funzionare
         print 'Inizio controllo'
         param = self.browse(cr, uid, ids[0])
-        #asset_obj = self.pool.get('account.asset.asset')
+        # asset_obj = self.pool.get('account.asset.asset')
         asset_dep_lineobj = self.pool.get('account.asset.depreciation.line')
         if not ids:
-            return {'type': 'ir.actions.act_window_close'}
+            return {'type':'ir.actions.act_window_close'}
         if param.fiscal_year.code == '2016':
             raise osv.except_osv(_('Errore'),
                                  _("Periodo Errato"))
-            return {'type': 'ir.actions.act_window_close'}
+            return {'type':'ir.actions.act_window_close'}
         id_line_dep = asset_dep_lineobj.search(cr, uid, [
             ('fiscal_year', '=', param.fiscal_year.id)])
-        for line in asset_dep_lineobj.browse(cr, uid,id_line_dep):
+        for line in asset_dep_lineobj.browse(cr, uid, id_line_dep):
             value_residual = line.amount + line.remaining_value
             remaining_value = value_residual - line.amount - line.depreciated_value
-            asset_dep_lineobj.write(cr, uid, [line.id],{
-                'remaining_value': remaining_value,
-                'value_residual': value_residual
+            asset_dep_lineobj.write(cr, uid, [line.id], {
+                'remaining_value':remaining_value,
+                'value_residual':value_residual
             })
             print line.asset_id.code, remaining_value, value_residual
 
+        return {'type':'ir.actions.act_window_close'}
 
-        return {'type': 'ir.actions.act_window_close'}
 
 asset_journal_wz()
 
-class asset_journal_temp(osv.osv_memory):
 
+class asset_journal_temp(osv.osv_memory):
     _name = "asset.journal.temp"
     _description = "Tmp Asset Journal"
 
-    _columns = {'date': fields.date('Print Date'),
-                'fiscal_year': fields.many2one('account.fiscalyear',
-                                               'Period to Print'),
-                'asset_type': fields.selection(
+    _columns = {'date':fields.date('Print Date'),
+                'fiscal_year':fields.many2one('account.fiscalyear',
+                                              'Period to Print'),
+                'asset_type':fields.selection(
                     (('M', 'Material asset'),
                      ('I', 'Intangible asset'),
                      ('P', 'Capital gain'),
                      ('A', 'All')),
                     'Type Asset'),
-                'cat_id': fields.many2one('account.asset.category',
-                                          'Asset Category'),
-                'first_page_number': fields.float('From Page'),
-                'not_moved_too': fields.boolean('Assets Without Moves'),
-                'asset_id': fields.many2one('account.asset.asset', 'Asset'),
-                'category_id': fields.many2one('account.asset.category',
-                                               'Asset Category'),
-                'deductibility': fields.float(
+                'cat_id':fields.many2one('account.asset.category',
+                                         'Asset Category'),
+                'first_page_number':fields.float('From Page'),
+                'not_moved_too':fields.boolean('Assets Without Moves'),
+                'asset_id':fields.many2one('account.asset.asset', 'Asset'),
+                'category_id':fields.many2one('account.asset.category',
+                                              'Asset Category'),
+                'deductibility':fields.float(
                     'Perc. di deducibilita',
                     digits_compute=dp.get_precision('Account')),
-                'purchase_date': fields.date('Purchase Date'),
-                'purchase_value': fields.float('Gross Value'),
-                'value_residual': fields.float('Residual Value'),
-               # 'asset_value_residual': fields.float('Asset Residual Value'),
-                'type_amortization': fields.selection(
+                'purchase_date':fields.date('Purchase Date'),
+                'purchase_value':fields.float('Gross Value'),
+                'value_residual':fields.float('Residual Value'),
+                # 'asset_value_residual': fields.float('Asset Residual Value'),
+                'type_amortization':fields.selection(
                     (('O', 'ordinary'),
                      ('F', 'first year reduction'),
                      ('A', 'advance'),
                      ('R', 'reduced'),
                      ('P', 'personal')),
                     'Tipo Ammortamento'),
-                'perc_ammortization': fields.float(
+                'perc_ammortization':fields.float(
                     'Percentage Amortization',
                     digits_compute=dp.get_precision('Account')),
-                'depreciated_value': fields.float(
+                'depreciated_value':fields.float(
                     'Amount Already Depreciated'),
-                'amount': fields.float(
+                'amount':fields.float(
                     'Current Depreciation',
                     digits_compute=dp.get_precision('Account')),
-                'remaining_value': fields.float(
+                'remaining_value':fields.float(
                     'Next Period Depreciation',
                     digits_compute=dp.get_precision('Account')),
-                'sale_date': fields.date('Sale Date'),
-                'lineap_id': fields.many2one('lineap.asset', 'Linea'),
-                'sede_id': fields.many2one('asset.sedi', 'Sede'),
+                'sale_date':fields.date('Sale Date'),
+                'lineap_id':fields.many2one('lineap.asset', 'Linea'),
+                'sede_id':fields.many2one('asset.sedi', 'Sede'),
 
                 }
 
@@ -286,25 +282,25 @@ class asset_journal_temp(osv.osv_memory):
                     line_dep = asset_dep_lineobj.browse(cr, uid,
                                                         id_line_dep[0])
                     vals = {
-                        'date': param.date,
-                        'fiscal_year': param.fiscal_year.id,
-                        'asset_type': param.asset_type,
-                        'cat_id': param.cat_id.id,
-                        'first_page_number': param.first_page_number,
-                        'not_moved_too': param.not_moved_too,
-                        'asset_id': asset.id,
-                        'category_id': asset.category_id.id,
-                        'deductibility': asset.deductibility,
-                        'purchase_date': asset.purchase_date,
-                        'purchase_value': asset.purchase_value,
-                        'value_residual': line_dep.amount + line_dep.remaining_value,
-                       # 'asset_value_residual': asset.value_residual,
-                        'type_amortization': line_dep.type_amortization,
-                        'perc_ammortization': line_dep.perc_ammortization,
-                        'depreciated_value': line_dep.depreciated_value,
-                        'amount': line_dep.amount,
-                        'remaining_value': line_dep.remaining_value,
-                        'sale_date': asset.sale_date,
+                        'date':param.date,
+                        'fiscal_year':param.fiscal_year.id,
+                        'asset_type':param.asset_type,
+                        'cat_id':param.cat_id.id,
+                        'first_page_number':param.first_page_number,
+                        'not_moved_too':param.not_moved_too,
+                        'asset_id':asset.id,
+                        'category_id':asset.category_id.id,
+                        'deductibility':asset.deductibility,
+                        'purchase_date':asset.purchase_date,
+                        'purchase_value':asset.purchase_value,
+                        'value_residual':line_dep.amount + line_dep.remaining_value,
+                        # 'asset_value_residual': asset.value_residual,
+                        'type_amortization':line_dep.type_amortization,
+                        'perc_ammortization':line_dep.perc_ammortization,
+                        'depreciated_value':line_dep.depreciated_value,
+                        'amount':line_dep.amount,
+                        'remaining_value':line_dep.remaining_value,
+                        'sale_date':asset.sale_date,
                     }
                 else:
                     line_dep = False
@@ -320,72 +316,72 @@ class asset_journal_temp(osv.osv_memory):
                             perc = asset.personal_ammortization
                         if asset.sale_date:
                             vals = {
-                                'date': param.date,
-                                'fiscal_year': param.fiscal_year.id,
-                                'asset_type': param.asset_type,
-                                'cat_id': param.cat_id.id,
-                                'first_page_number': param.first_page_number,
-                                'not_moved_too': param.not_moved_too,
-                                'asset_id': asset.id,
-                                'category_id': asset.category_id.id,
-                                'deductibility': asset.deductibility,
-                                'purchase_date': asset.purchase_date,
-                                'purchase_value': asset.purchase_value,
-                                'value_residual': 0.0, #asset.value_residual,
-                                'type_amortization': asset.type_amortization,
-                                'perc_ammortization': perc,
-                                'depreciated_value': 0.0, #asset.value_residual,
-                                'amount': 0.0,
-                                'remaining_value': 0.0,
-                                'sale_date': asset.sale_date,
+                                'date':param.date,
+                                'fiscal_year':param.fiscal_year.id,
+                                'asset_type':param.asset_type,
+                                'cat_id':param.cat_id.id,
+                                'first_page_number':param.first_page_number,
+                                'not_moved_too':param.not_moved_too,
+                                'asset_id':asset.id,
+                                'category_id':asset.category_id.id,
+                                'deductibility':asset.deductibility,
+                                'purchase_date':asset.purchase_date,
+                                'purchase_value':asset.purchase_value,
+                                'value_residual':0.0,  # asset.value_residual,
+                                'type_amortization':asset.type_amortization,
+                                'perc_ammortization':perc,
+                                'depreciated_value':0.0,  # asset.value_residual,
+                                'amount':0.0,
+                                'remaining_value':0.0,
+                                'sale_date':asset.sale_date,
                             }
 
                         else:
                             vals = {
-                                'date': param.date,
-                                'fiscal_year': param.fiscal_year.id,
-                                'asset_type': param.asset_type,
-                                'cat_id': param.cat_id.id,
-                                'first_page_number': param.first_page_number,
-                                'not_moved_too': param.not_moved_too,
-                                'asset_id': asset.id,
-                                'category_id': asset.category_id.id,
-                                'deductibility': asset.deductibility,
-                                'purchase_date': asset.purchase_date,
-                                'purchase_value': asset.purchase_value,
-                                'value_residual': asset.value_residual,
-                                'type_amortization': asset.type_amortization,
-                                'perc_ammortization': perc,
-                                'depreciated_value': asset.value_residual,
-                                'amount': 0.0,
-                                'remaining_value': 0.0,
-                                'sale_date': asset.sale_date,
+                                'date':param.date,
+                                'fiscal_year':param.fiscal_year.id,
+                                'asset_type':param.asset_type,
+                                'cat_id':param.cat_id.id,
+                                'first_page_number':param.first_page_number,
+                                'not_moved_too':param.not_moved_too,
+                                'asset_id':asset.id,
+                                'category_id':asset.category_id.id,
+                                'deductibility':asset.deductibility,
+                                'purchase_date':asset.purchase_date,
+                                'purchase_value':asset.purchase_value,
+                                'value_residual':asset.value_residual,
+                                'type_amortization':asset.type_amortization,
+                                'perc_ammortization':perc,
+                                'depreciated_value':asset.value_residual,
+                                'amount':0.0,
+                                'remaining_value':0.0,
+                                'sale_date':asset.sale_date,
                             }
                     else:
                         if asset.remaining_value > 0.0 \
                                 and not asset.sale_date:
                             vals = {
-                                'date': param.date,
-                                'fiscal_year': param.fiscal_year.id,
-                                'asset_type': param.asset_type,
-                                'cat_id': param.cat_id.id,
-                                'first_page_number': param.first_page_number,
-                                'not_moved_too': param.not_moved_too,
-                                'asset_id': asset.id,
-                                'category_id': asset.category_id.id,
-                                'deductibility': asset.deductibility,
-                                'purchase_date': asset.purchase_date,
-                                'purchase_value': asset.purchase_value,
-                                'value_residual': asset.value_residual,
-                                'type_amortization': asset.type_amortization,
-                                'perc_ammortization': 0.0,
-                                'depreciated_value': 0.0, #asset.value_residual,
-                                'amount': 0.0, #asset.amount,
-                                'remaining_value': asset.remaining_value,
-                                'sale_date': asset.sale_date,
+                                'date':param.date,
+                                'fiscal_year':param.fiscal_year.id,
+                                'asset_type':param.asset_type,
+                                'cat_id':param.cat_id.id,
+                                'first_page_number':param.first_page_number,
+                                'not_moved_too':param.not_moved_too,
+                                'asset_id':asset.id,
+                                'category_id':asset.category_id.id,
+                                'deductibility':asset.deductibility,
+                                'purchase_date':asset.purchase_date,
+                                'purchase_value':asset.purchase_value,
+                                'value_residual':asset.value_residual,
+                                'type_amortization':asset.type_amortization,
+                                'perc_ammortization':0.0,
+                                'depreciated_value':0.0,  # asset.value_residual,
+                                'amount':0.0,  # asset.amount,
+                                'remaining_value':asset.remaining_value,
+                                'sale_date':asset.sale_date,
                             }
                         else:
-                            perc=0.0
+                            perc = 0.0
                             if asset.type_amortization == 'O':
                                 perc = asset.ordinary_amortization
                             if asset.type_amortization == 'R':
@@ -395,24 +391,24 @@ class asset_journal_temp(osv.osv_memory):
                             if asset.type_amortization == 'P':
                                 perc = asset.personal_ammortization
                             vals = {
-                                'date': param.date,
-                                'fiscal_year': param.fiscal_year.id,
-                                'asset_type': param.asset_type,
-                                'cat_id': param.cat_id.id,
-                                'first_page_number': param.first_page_number,
-                                'not_moved_too': param.not_moved_too,
-                                'asset_id': asset.id,
-                                'category_id': asset.category_id.id,
-                                'deductibility': asset.deductibility,
-                                'purchase_date': asset.purchase_date,
-                                'purchase_value': asset.purchase_value,
-                                'value_residual': asset.value_residual,
-                                'type_amortization': asset.type_amortization,
-                                'perc_ammortization': perc,
-                                'depreciated_value': 0.0,
-                                'amount': 0.0,
-                                'remaining_value': 0.0,
-                                'sale_date': asset.sale_date,
+                                'date':param.date,
+                                'fiscal_year':param.fiscal_year.id,
+                                'asset_type':param.asset_type,
+                                'cat_id':param.cat_id.id,
+                                'first_page_number':param.first_page_number,
+                                'not_moved_too':param.not_moved_too,
+                                'asset_id':asset.id,
+                                'category_id':asset.category_id.id,
+                                'deductibility':asset.deductibility,
+                                'purchase_date':asset.purchase_date,
+                                'purchase_value':asset.purchase_value,
+                                'value_residual':asset.value_residual,
+                                'type_amortization':asset.type_amortization,
+                                'perc_ammortization':perc,
+                                'depreciated_value':0.0,
+                                'amount':0.0,
+                                'remaining_value':0.0,
+                                'sale_date':asset.sale_date,
                             }
                 if vals:
                     vals['lineap_id'] = asset.lineap_id.id or False
@@ -421,11 +417,11 @@ class asset_journal_temp(osv.osv_memory):
                     ok = True
         return ok
 
+
 asset_journal_temp()
 
 
 class asset_registro_temp(osv.osv_memory):
-
     _name = 'asset.registro.temp'
     _description = 'TMP registro cespiti'
 
@@ -434,82 +430,82 @@ class asset_registro_temp(osv.osv_memory):
         self.unlink(cr, uid, ids, context)
         return True
 
-    _columns = {'date': fields.date('Data di Stampa'),
-                'fiscal_year': fields.many2one('account.fiscalyear',
-                                               'Anno di Stampa'),
-                'asset_type': fields.selection(
+    _columns = {'date':fields.date('Data di Stampa'),
+                'fiscal_year':fields.many2one('account.fiscalyear',
+                                              'Anno di Stampa'),
+                'asset_type':fields.selection(
                     (('M', 'Material asset'),
                      ('I', 'Intangible asset'),
                      ('P', 'Capital gain'),
                      ('A', 'All')),
                     'Tipo Cespite'),
-                'cat_id': fields.many2one('account.asset.category',
-                                          'Categoria Selezione'),
-                'first_page_number': fields.float('Da Pagina'),
-                'not_moved_too': fields.boolean('Assets Without Moves'),
-                'lineap_id': fields.many2one('lineap.asset', 'Linea'),
-                'sede_id': fields.many2one('asset.sedi', 'Sede'),
-                'asset_id': fields.many2one('account.asset.asset', 'Asset'),
-                'category_id': fields.many2one('account.asset.category',
-                                               'Categoria Cespite'),
-                'purchase_date': fields.date('Purchase Date'),
-                'purchase_value': fields.float('Gross Value'),
-                'deductibility': fields.float('Deducibilita'),
-                'sale_date': fields.date('Sale Date'),
-                'im_non_amm': fields.float('Importo non Ammortizzabile'),
-                'in_perc_amm': fields.float('Perc.Amm.to ini'),
-                'ese_disatt': fields.char('Anno Disatt.', size=4),
-                'fl_usato': fields.char('Usato', size=1),
-                'in_type_amortization': fields.char('Tipo Ammortamento ini', size=20),
-                'in_valbene': fields.float('Inc.Val.Bene ini'),
-                'in_spese': fields.float('Oneri e Spese ini'),
-                'in_rival': fields.float('Rivalutazioni ini'),
-                'in_sval': fields.float('Svalutazioni ini'),
-                'in_decval': fields.float('Dec.Val.Bene ini'),
-                'in_fdoammord': fields.float('F.do Amm.to Ord. ini'),
-                'in_fdoammant': fields.float('F.do Amm.to Ant. ini'),
-                'in_quoper': fields.float('Quote Perse ini'),
-                'in_resam': fields.float('Residuo da Amm. Ini'),
-                'inv_line_id': fields.many2one('account.invoice.line', 'Riga Fattura'),
-                'move_line_id': fields.many2one('account.move.line', 'Riga Registrazione'),
-                'data_reg': fields.date('Data Registrazione'),
-                'journal_id': fields.many2one('account.journal', 'Causale'),
-                'partner_id': fields.many2one('res.partner', 'Fornitore / Cliente'),
-                'numdoc': fields.char('Numero Documento', size=20),
-                'data_doc': fields.date('Data Documento'),
-                'importo': fields.float('Importo'),
-                'fi_perc_amm': fields.float('Perc.Amm.to fin'),
-                'fi_type_amortization': fields.char('Tipo Ammortamento fin', size=20),
-                'fi_valbene': fields.float('Inc.Val.Bene fin'),
-                'fi_spese': fields.float('Oneri e Spese fin'),
-                'fi_rival': fields.float('Rivalutazioni Fin'),
-                'fi_sival': fields.float('Svalutazioni Fin'),
-                'fi_decval': fields.float('Dec.Val.Bene Fin'),
-                'fi_fdoammord': fields.float('F.do Amm.to Ord. Fin'),
-                'fi_fdoammant': fields.float('F.do Amm.to Ant. Fin'),
-                'fi_quoper': fields.float('Quate Perse Fin'),
-                'fi_resam': fields.float('Residuo da Amm. Fin'),
+                'cat_id':fields.many2one('account.asset.category',
+                                         'Categoria Selezione'),
+                'first_page_number':fields.float('Da Pagina'),
+                'not_moved_too':fields.boolean('Assets Without Moves'),
+                'lineap_id':fields.many2one('lineap.asset', 'Linea'),
+                'sede_id':fields.many2one('asset.sedi', 'Sede'),
+                'asset_id':fields.many2one('account.asset.asset', 'Asset'),
+                'category_id':fields.many2one('account.asset.category',
+                                              'Categoria Cespite'),
+                'purchase_date':fields.date('Purchase Date'),
+                'purchase_value':fields.float('Gross Value'),
+                'deductibility':fields.float('Deducibilita'),
+                'sale_date':fields.date('Sale Date'),
+                'im_non_amm':fields.float('Importo non Ammortizzabile'),
+                'in_perc_amm':fields.float('Perc.Amm.to ini'),
+                'ese_disatt':fields.char('Anno Disatt.', size=4),
+                'fl_usato':fields.char('Usato', size=1),
+                'in_type_amortization':fields.char('Tipo Ammortamento ini', size=20),
+                'in_valbene':fields.float('Inc.Val.Bene ini'),
+                'in_spese':fields.float('Oneri e Spese ini'),
+                'in_rival':fields.float('Rivalutazioni ini'),
+                'in_sval':fields.float('Svalutazioni ini'),
+                'in_decval':fields.float('Dec.Val.Bene ini'),
+                'in_fdoammord':fields.float('F.do Amm.to Ord. ini'),
+                'in_fdoammant':fields.float('F.do Amm.to Ant. ini'),
+                'in_quoper':fields.float('Quote Perse ini'),
+                'in_resam':fields.float('Residuo da Amm. Ini'),
+                'inv_line_id':fields.many2one('account.invoice.line', 'Riga Fattura'),
+                'move_line_id':fields.many2one('account.move.line', 'Riga Registrazione'),
+                'data_reg':fields.date('Data Registrazione'),
+                'journal_id':fields.many2one('account.journal', 'Causale'),
+                'partner_id':fields.many2one('res.partner', 'Fornitore / Cliente'),
+                'numdoc':fields.char('Numero Documento', size=20),
+                'data_doc':fields.date('Data Documento'),
+                'importo':fields.float('Importo'),
+                'fi_perc_amm':fields.float('Perc.Amm.to fin'),
+                'fi_type_amortization':fields.char('Tipo Ammortamento fin', size=20),
+                'fi_valbene':fields.float('Inc.Val.Bene fin'),
+                'fi_spese':fields.float('Oneri e Spese fin'),
+                'fi_rival':fields.float('Rivalutazioni Fin'),
+                'fi_sival':fields.float('Svalutazioni Fin'),
+                'fi_decval':fields.float('Dec.Val.Bene Fin'),
+                'fi_fdoammord':fields.float('F.do Amm.to Ord. Fin'),
+                'fi_fdoammant':fields.float('F.do Amm.to Ant. Fin'),
+                'fi_quoper':fields.float('Quate Perse Fin'),
+                'fi_resam':fields.float('Residuo da Amm. Fin'),
 
                 }
     _order = "category_id,asset_id,data_reg"
 
-    def find_last_year(self,cr, uid, ids, param, context=None):
+    def find_last_year(self, cr, uid, ids, param, context=None):
         last_year = False
         fiscalyear_obj = self.pool.get('account.fiscalyear')
         dtp = param.fiscal_year.date_stop
-        anno = str(int(dtp[:4])-1)
+        anno = str(int(dtp[:4]) - 1)
         dt = anno + dtp[4:]
-        last_year_ids = fiscalyear_obj.find(cr,uid,dt=dt)
+        last_year_ids = fiscalyear_obj.find(cr, uid, dt=dt)
         if last_year_ids:
-            last_year = fiscalyear_obj.browse(cr,uid,last_year_ids)
+            last_year = fiscalyear_obj.browse(cr, uid, last_year_ids)
         return last_year
 
     def crea_temp(self, cr, uid, ids, param, context=None):
         asset_obj = self.pool.get('account.asset.asset')
         asset_dep_lineobj = self.pool.get('account.asset.depreciation.line')
         invoice_lineobj = self.pool.get('account.invoice.line')
-        move_lineobj =  self.pool.get('account.move.line')
-        last_year = self.find_last_year(cr,uid,ids,param)
+        move_lineobj = self.pool.get('account.move.line')
+        last_year = self.find_last_year(cr, uid, ids, param)
         ok = self._pulisci(cr, uid, context)
         ok = True
 
@@ -543,42 +539,44 @@ class asset_registro_temp(osv.osv_memory):
                 print_asset = True
             if print_asset:
                 # calcolo lo stato del cespite
-                #import pdb;
-                #pdb.set_trace()
+                # import pdb;
+                # pdb.set_trace()
                 stato = ''
-                if asset.value_residual != 0.0 and\
-                     asset.accumulated_depreciation == 0.0 and\
-                     asset.remaining_value == asset.value_residual:
+                if asset.value_residual != 0.0 and \
+                        asset.accumulated_depreciation == 0.0 and \
+                        asset.remaining_value == asset.value_residual:
                     stato = 'new'
-                if asset.value_residual != 0.0 and\
-                     asset.accumulated_depreciation != 0.0 and\
-                     asset.remaining_value != asset.value_residual and\
-                     asset.remaining_value != 0.0:
+                if asset.value_residual != 0.0 and \
+                        asset.accumulated_depreciation != 0.0 and \
+                        asset.remaining_value != asset.value_residual and \
+                        asset.remaining_value != 0.0:
                     stato = 'doing'
-                if asset.value_residual != 0.0 and\
-                     asset.accumulated_depreciation == asset.value_residual and\
-                     asset.remaining_value == 0.0:
+                if asset.value_residual != 0.0 and \
+                        asset.accumulated_depreciation == asset.value_residual and \
+                        asset.remaining_value == 0.0:
                     stato = 'ended'
                 if not id_line_dep and stato in ('new', 'doing'):
                     if stato == 'doing':
                         raise osv.except_osv(_('ERRORE !'),
-                                             _('al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto'))
+                                             _(
+                                                 'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto'))
                     if stato == 'new':
                         if param.fiscal_year.id == asset.first_use_year.id:
                             raise osv.except_osv(_('ERRORE !'),
-                                                 _('al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto'))
+                                                 _(
+                                                     'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto'))
                 testa_rec = {
-                    'date': param.date,
-                    'fiscal_year': param.fiscal_year.id,
-                    'asset_type': param.asset_type,
-                    'cat_id': param.cat_id.id,
-                    'first_page_number': param.first_page_number,
-                    'not_moved_too': param.not_moved_too,
-                    'asset_id': asset.id,
-                    'category_id': asset.category_id.id,
-                    'deductibility': asset.deductibility,
-                    'purchase_date': asset.purchase_date,
-                    'purchase_value': asset.purchase_value,
+                    'date':param.date,
+                    'fiscal_year':param.fiscal_year.id,
+                    'asset_type':param.asset_type,
+                    'cat_id':param.cat_id.id,
+                    'first_page_number':param.first_page_number,
+                    'not_moved_too':param.not_moved_too,
+                    'asset_id':asset.id,
+                    'category_id':asset.category_id.id,
+                    'deductibility':asset.deductibility,
+                    'purchase_date':asset.purchase_date,
+                    'purchase_value':asset.purchase_value,
                 }
                 # ora si cerca e calcola i dati iniziali
                 if id_line_dep:
@@ -592,13 +590,13 @@ class asset_registro_temp(osv.osv_memory):
                         ('fiscal_year', '=', last_year.id)])
                     if id_lline_dep:
                         last_line_dep = asset_dep_lineobj.browse(cr, uid,
-                                                            id_lline_dep[0])
+                                                                 id_lline_dep[0])
                     else:
                         last_line_dep = False
                 else:
                     last_line_dep = False
                 if last_line_dep:
-                    testa_rec['in_valbene'] = asset.purchase_valuelast_line_dep.amount+last_line_dep.remaining_value
+                    testa_rec['in_valbene'] = asset.purchase_valuelast_line_dep.amount + last_line_dep.remaining_value
                     testa_rec['in_perc_amm'] = last_line_dep.perc_ammortization
                     testa_rec['in_fdoammord'] = last_line_dep.amount
                     testa_rec['in_type_amortization'] = last_line_dep.type_amortization
@@ -611,7 +609,7 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['in_fdoammord'] = 0.0
                     testa_rec['in_type_amortization'] = ''
                 if line_dep:
-                    testa_rec['fi_valbene'] = line_dep.amount+line_dep.remaining_value
+                    testa_rec['fi_valbene'] = line_dep.amount + line_dep.remaining_value
                     testa_rec['fi_perc_amm'] = line_dep.perc_ammortization
                     testa_rec['fi_fdoammord'] = line_dep.amount
                     testa_rec['fi_type_amortization'] = line_dep.type_amortization
@@ -624,7 +622,7 @@ class asset_registro_temp(osv.osv_memory):
                 not_write = True
                 if id_line_invoice:
                     # ci sono delle fatture nell'anno indicato
-                    for line in invoice_lineobj.browse(cr,uid,id_line_invoice):
+                    for line in invoice_lineobj.browse(cr, uid, id_line_invoice):
                         mv = {}
                         mv['inv_line_id'] = line.id
                         mv['move_line_id'] = False
