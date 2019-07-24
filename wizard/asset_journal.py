@@ -466,6 +466,7 @@ class asset_registro_temp(osv.osv_memory):
                 'in_spese':fields.float('Oneri e Spese ini'),
                 'in_rival':fields.float('Rivalutazioni ini'),
                 'in_sval':fields.float('Svalutazioni ini'),
+                'in_amm_period':fields.float('Ammortamento del periodo ini'),
                 'in_decval':fields.float('Dec.Val.Bene ini'),
                 'in_fdoammord':fields.float('F.do Amm.to Ord. ini'),
                 'in_fdoammant':fields.float('F.do Amm.to Ant. ini'),
@@ -486,6 +487,7 @@ class asset_registro_temp(osv.osv_memory):
                 'fi_rival':fields.float('Rivalutazioni Fin'),
                 'fi_sival':fields.float('Svalutazioni Fin'),
                 'fi_decval':fields.float('Dec.Val.Bene Fin'),
+                'fi_amm_period':fields.float('Ammortamento del periodo fin'),
                 'fi_fdoammord':fields.float('F.do Amm.to Ord. Fin'),
                 'fi_fdoammant':fields.float('F.do Amm.to Ant. Fin'),
                 'fi_quoper':fields.float('Quate Perse Fin'),
@@ -603,7 +605,8 @@ class asset_registro_temp(osv.osv_memory):
                 if last_line_dep:
                     testa_rec['in_valbene'] = last_line_dep.value_residual
                     testa_rec['in_perc_amm'] = last_line_dep.perc_ammortization
-                    testa_rec['in_fdoammord'] = last_line_dep.amount
+                    testa_rec['in_amm_period'] = last_line_dep.amount
+                    testa_rec['in_fdoammord'] = last_line_dep.depreciated_value
                     testa_rec['in_type_amortization'] = last_line_dep.type_amortization
                     testa_rec['in_resam'] = last_line_dep.remaining_value
                 else:
@@ -617,7 +620,8 @@ class asset_registro_temp(osv.osv_memory):
                 if line_dep:
                     testa_rec['fi_valbene'] = line_dep.value_residual
                     testa_rec['fi_perc_amm'] = line_dep.perc_ammortization
-                    testa_rec['fi_fdoammord'] = line_dep.amount
+                    testa_rec['fi_amm_period'] = last_line_dep.amount
+                    testa_rec['fi_fdoammord'] = line_dep.depreciated_value
                     testa_rec['fi_type_amortization'] = line_dep.type_amortization
                     testa_rec['fi_resam'] = line_dep.remaining_value
                 else:
