@@ -620,7 +620,7 @@ class asset_registro_temp(osv.osv_memory):
                 if line_dep:
                     testa_rec['fi_valbene'] = line_dep.value_residual
                     testa_rec['fi_perc_amm'] = line_dep.perc_ammortization
-                    testa_rec['fi_amm_period'] = last_line_dep.amount
+                    testa_rec['fi_amm_period'] = line_dep.amount
                     testa_rec['fi_fdoammord'] = line_dep.depreciated_value
                     testa_rec['fi_type_amortization'] = line_dep.type_amortization
                     testa_rec['fi_resam'] = line_dep.remaining_value
