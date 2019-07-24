@@ -601,10 +601,11 @@ class asset_registro_temp(osv.osv_memory):
                 else:
                     last_line_dep = False
                 if last_line_dep:
-                    testa_rec['in_valbene'] = asset.purchase_valuelast_line_dep.amount + last_line_dep.remaining_value
+                    testa_rec['in_valbene'] = last_line_dep.value_residual
                     testa_rec['in_perc_amm'] = last_line_dep.perc_ammortization
                     testa_rec['in_fdoammord'] = last_line_dep.amount
                     testa_rec['in_type_amortization'] = last_line_dep.type_amortization
+                    testa_rec['in_resam'] = last_line_dep.remaining_value
                 else:
                     # vanno gestiti bene i casi in cui sono completamente ammortizzati
                     # questi dati a zero sono validi solo nel caso
@@ -614,10 +615,11 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['in_fdoammord'] = 0.0
                     testa_rec['in_type_amortization'] = ''
                 if line_dep:
-                    testa_rec['fi_valbene'] = line_dep.amount + line_dep.remaining_value
+                    testa_rec['fi_valbene'] = line_dep.value_residual
                     testa_rec['fi_perc_amm'] = line_dep.perc_ammortization
                     testa_rec['fi_fdoammord'] = line_dep.amount
                     testa_rec['fi_type_amortization'] = line_dep.type_amortization
+                    testa_rec['fi_resam'] = line_dep.remaining_value
                 else:
                     testa_rec['fi_valbene'] = asset.value_residual
                     testa_rec['fi_perc_amm'] = 0
