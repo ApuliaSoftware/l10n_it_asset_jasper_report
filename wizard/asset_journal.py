@@ -526,8 +526,8 @@ class asset_registro_temp(osv.osv_memory):
             # cerca le righe fatture dell'anno selezionato
             id_line_invoice = invoice_lineobj.search(cr, uid, [
                 ('asset_id', '=', asset.id),
-                ('date_invoice', '>=', param.fiscal_year.date_start),
-                ('date_invoice', '<=', param.fiscal_year.date_stop)])
+                ('registration_date', '>=', param.fiscal_year.date_start),
+                ('registration_date', '<=', param.fiscal_year.date_stop)])
             # se entrambe i risultati sono vuoti e non vuole i non movimentati 'print_asset' False
             if not id_line_dep and not id_line_invoice \
                     and not param.not_moved_too:
