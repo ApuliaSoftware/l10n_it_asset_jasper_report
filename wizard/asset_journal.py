@@ -533,7 +533,7 @@ class asset_registro_temp(osv.osv_memory):
                 invoice_line_ids = []
                 for line in invoice_lineobj.browse(cr, uid, id_line_invoice):
                     if line.invoice_id.registration_date >= param.fiscal_year.date_start and \
-                            line.invoice_id.registration_date >= param.fiscal_year.date_stop:
+                            line.invoice_id.registration_date <= param.fiscal_year.date_stop:
                         invoice_line_ids.append(line.id)
                 id_line_invoice = invoice_line_ids
             # se entrambe i risultati sono vuoti e non vuole i non movimentati 'print_asset' False
@@ -572,14 +572,15 @@ class asset_registro_temp(osv.osv_memory):
                     stato = 'ended'
                 if not id_line_dep and stato in ('new', 'doing'):
                     if stato == 'doing':
-                        raise osv.except_osv(_('ERRORE !'),
+                        if not asset.customer_id:
+	                        raise osv.except_osv(_('ERRORE !'),
                                              _(
-                                                 'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto'))
+                                                 'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto\n'+ stato))
                     if stato == 'new':
                         if param.fiscal_year.id == asset.first_use_year.id:
                             raise osv.except_osv(_('ERRORE !'),
                                                  _(
-                                                     'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto'))
+                                                     'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto\n'+ stato))
                 testa_rec = {
                     'date':param.date,
                     'fiscal_year':param.fiscal_year.id,
