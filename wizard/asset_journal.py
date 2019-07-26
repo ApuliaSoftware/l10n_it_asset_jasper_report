@@ -582,10 +582,10 @@ class asset_registro_temp(osv.osv_memory):
                                                  _(
                                                      'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto\n'+ stato))
                 testa_rec = {
-                    'date':param.date,
-                    'fiscal_year':param.fiscal_year.id,
-                    'asset_type':param.asset_type,
-                    'cat_id':param.cat_id.id,
+                    'date': param.date,
+                    'fiscal_year': param.fiscal_year.id,
+                    'asset_type': param.asset_type,
+                    'cat_id': param.cat_id.id,
                     'first_page_number':param.first_page_number,
                     'not_moved_too':param.not_moved_too,
                     'asset_id':asset.id,
