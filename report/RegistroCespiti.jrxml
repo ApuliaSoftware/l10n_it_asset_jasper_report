@@ -3,6 +3,12 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<style name="Righe" mode="Opaque">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
 	<queryString>
 		<![CDATA[SELECT
   account_asset_asset.code,
@@ -131,13 +137,17 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 		<groupHeader>
 			<band height="23">
 				<textField>
-					<reportElement mode="Opaque" x="123" y="8" width="633" height="12" backcolor="#FFFF00"/>
-					<textElement/>
+					<reportElement mode="Opaque" x="191" y="0" width="610" height="20" backcolor="#FFFFCC"/>
+					<textElement>
+						<font size="13" isBold="true"/>
+					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{catname}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement mode="Opaque" x="23" y="8" width="100" height="12" backcolor="#FFFF00"/>
-					<textElement/>
+					<reportElement mode="Opaque" x="8" y="0" width="183" height="20" backcolor="#FFFFCC"/>
+					<textElement>
+						<font size="13" isBold="true"/>
+					</textElement>
 					<text><![CDATA[Categoria]]></text>
 				</staticText>
 			</band>
@@ -175,126 +185,223 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 	<group name="CodeAsset" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{code}]]></groupExpression>
 		<groupHeader>
-			<band height="81">
+			<band height="132">
 				<rectangle radius="10">
-					<reportElement x="10" y="36" width="792" height="40"/>
+					<reportElement mode="Opaque" x="0" y="96" width="801" height="34" backcolor="#E6FFFF"/>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement mode="Opaque" x="0" y="0" width="802" height="38" backcolor="#CCFFFF"/>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="44" width="802" height="52" backcolor="#CCFFCC"/>
 				</rectangle>
 				<textField>
-					<reportElement x="10" y="3" width="100" height="12"/>
+					<reportElement x="10" y="23" width="100" height="12"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{code}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="123" y="3" width="309" height="12"/>
+					<reportElement x="123" y="23" width="309" height="12"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{asset_name}]]></textFieldExpression>
 				</textField>
 				<textField pattern="###0;-###0" isBlankWhenNull="true">
-					<reportElement x="534" y="3" width="28" height="12"/>
+					<reportElement x="543" y="23" width="28" height="12"/>
 					<textElement textAlignment="Right">
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{deductibility}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
-					<reportElement x="148" y="57" width="100" height="12"/>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="148" y="77" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{in_valbene}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
-					<reportElement x="550" y="57" width="100" height="12"/>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="550" y="77" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{in_fdoammord}]]></textFieldExpression>
 				</textField>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement x="591" y="3" width="72" height="12"/>
+					<reportElement x="591" y="23" width="72" height="12"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.util.Date"><![CDATA[$F{purchase_date}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="35" y="57" width="100" height="12" isRemoveLineWhenBlank="true"/>
+					<reportElement x="35" y="77" width="100" height="12" isRemoveLineWhenBlank="true"/>
 					<textElement/>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{in_type_amortization}]]></textFieldExpression>
 				</textField>
 				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
-					<reportElement x="280" y="57" width="100" height="12"/>
+					<reportElement x="291" y="77" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{in_perc_amm}]]></textFieldExpression>
 				</textField>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement x="680" y="3" width="76" height="12"/>
+					<reportElement x="707" y="23" width="76" height="12"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.util.Date"><![CDATA[$F{sale_date}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="28" y="24" width="175" height="15"/>
+					<reportElement x="28" y="44" width="175" height="15"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Valori Esercizio Precedente]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="35" y="43" width="100" height="12"/>
+					<reportElement x="35" y="63" width="100" height="12"/>
 					<textElement verticalAlignment="Bottom"/>
-					<text><![CDATA[Tipo Amm.]]></text>
+					<text><![CDATA[Tipo Ammortamento]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="148" y="43" width="100" height="12"/>
+					<reportElement x="148" y="63" width="100" height="12"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
 					<text><![CDATA[Valore Iniziale]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="280" y="43" width="100" height="12"/>
+					<reportElement x="280" y="63" width="124" height="12"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-					<text><![CDATA[% Ammort.]]></text>
+					<text><![CDATA[% Ammortamento]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="550" y="43" width="100" height="12"/>
+					<reportElement x="550" y="63" width="118" height="12"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-					<text><![CDATA[Fondo Amm.]]></text>
+					<text><![CDATA[Fondo Ammortamento]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="432" y="4" width="100" height="20"/>
+					<reportElement x="432" y="24" width="100" height="20"/>
 					<textElement/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{purchase_value}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
-					<reportElement x="693" y="57" width="100" height="12"/>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="693" y="77" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{in_resam}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
-					<reportElement x="415" y="57" width="100" height="12"/>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="415" y="77" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{in_amm_period}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="415" y="43" width="100" height="12"/>
+					<reportElement x="415" y="63" width="117" height="12"/>
 					<textElement textAlignment="Right"/>
-					<text><![CDATA[Amm.Periodo]]></text>
+					<text><![CDATA[Ammortamento Periodo]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="693" y="43" width="100" height="12"/>
+					<reportElement x="669" y="63" width="130" height="12"/>
 					<textElement textAlignment="Right"/>
-					<text><![CDATA[Residuo da Amm.]]></text>
+					<text><![CDATA[Residuo da Ammortizzare]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="10" y="5" width="87" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Codice cespite]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="139" y="5" width="87" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Descrizione]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="445" y="5" width="87" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valore Cespite]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="532" y="5" width="57" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[% Amm.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="589" y="5" width="82" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data acquisto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="703" y="5" width="80" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data vendita]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="331" y="98" width="163" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Movimenti dell'esercizio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="112" width="104" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data Movimento]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="94" y="112" width="111" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data Documento]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="183" y="112" width="91" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Numero Documento]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="285" y="112" width="91" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sezionale]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="459" y="112" width="103" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fornitore/Cliente]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="711" y="112" width="91" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Importo]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
 			<band height="73">
-				<rectangle>
-					<reportElement x="9" y="10" width="793" height="51" backcolor="#CCCCCC"/>
+				<rectangle radius="10">
+					<reportElement x="0" y="10" width="802" height="51" backcolor="#99FF99"/>
 				</rectangle>
 				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="148" y="38" width="100" height="12"/>
+					<reportElement x="159" y="38" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{fi_valbene}]]></textFieldExpression>
 				</textField>
@@ -303,63 +410,69 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 					<textElement/>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{fi_type_amortization}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="550" y="38" width="100" height="12"/>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="568" y="38" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{fi_fdoammord}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="280" y="38" width="100" height="12"/>
+					<reportElement x="294" y="38" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{fi_perc_amm}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="20" y="0" width="100" height="12"/>
+					<reportElement x="20" y="14" width="163" height="12"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
-					<text><![CDATA[Valori Esercizio]]></text>
+					<text><![CDATA[Valori a fine Esercizio]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="550" y="26" width="100" height="12"/>
+					<reportElement x="550" y="26" width="133" height="12"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-					<text><![CDATA[Fondo Amm.]]></text>
+					<text><![CDATA[Totale Fondo Ammoramento]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="148" y="26" width="100" height="12"/>
+					<reportElement x="148" y="26" width="126" height="12"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-					<text><![CDATA[Valore da Ammo.	]]></text>
+					<text><![CDATA[Valore da Ammortizzare]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="35" y="26" width="100" height="12"/>
 					<textElement verticalAlignment="Bottom"/>
-					<text><![CDATA[Tipo Amm.]]></text>
+					<text><![CDATA[Tipo Ammortamento]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="280" y="26" width="100" height="12"/>
+					<reportElement x="280" y="26" width="124" height="12"/>
 					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-					<text><![CDATA[% Ammort.]]></text>
+					<text><![CDATA[% Ammortamento]]></text>
 				</staticText>
-				<textField pattern="###0.00;-###0.00">
+				<textField pattern="#,##0.00;-#,##0.00">
 					<reportElement x="693" y="38" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{fi_resam}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="415" y="38" width="100" height="12"/>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="426" y="38" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$F{fi_amm_period}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="415" y="26" width="100" height="12"/>
+					<reportElement x="415" y="26" width="128" height="12"/>
 					<textElement textAlignment="Right"/>
-					<text><![CDATA[Amm.Periodo]]></text>
+					<text><![CDATA[Ammortamento Periodo]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="693" y="26" width="100" height="12"/>
+					<reportElement x="681" y="26" width="118" height="12"/>
 					<textElement textAlignment="Right"/>
-					<text><![CDATA[Residio da Amm.]]></text>
+					<text><![CDATA[Residio da Ammortizzare]]></text>
 				</staticText>
+				<line>
+					<reportElement x="0" y="67" width="801" height="1"/>
+					<graphicElement>
+						<pen lineWidth="2.5" lineStyle="Double" lineColor="#FF0000"/>
+					</graphicElement>
+				</line>
 			</band>
 		</groupFooter>
 	</group>
@@ -369,64 +482,88 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 	<pageHeader>
 		<band height="35" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="163" height="20"/>
-				<textElement/>
-				<text><![CDATA[LIBRO BENI AMMORTIZZABILI]]></text>
+				<reportElement x="20" y="0" width="163" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MAINETTI OMAF s.r.l.]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="277" y="0" width="60" height="20"/>
-				<textElement/>
+				<reportElement x="590" y="0" width="73" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{date}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="663" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+$V{PAGE_NUMBER}+" di"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="743" y="0" width="40" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="534" y="0" width="45" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="323" y="0" width="268" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[LIBRO BENI AMMORTIZZABILI]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="20">
+			<frame>
+				<reportElement style="Righe" mode="Opaque" x="0" y="1" width="801" height="19" forecolor="#000000" backcolor="#FFFFFF"/>
+			</frame>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="60" height="20"/>
+				<reportElement x="10" y="0" width="60" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{data_reg}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="75" y="0" width="60" height="20"/>
+				<reportElement x="107" y="0" width="60" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{data_doc}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="135" y="0" width="100" height="20"/>
+				<reportElement x="284" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{journalname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="183" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{numdoc}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="248" y="0" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{journalname}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
-				<reportElement x="703" y="0" width="99" height="20"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{importo}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="398" y="0" width="305" height="20"/>
+				<reportElement x="466" y="0" width="237" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{partnename}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement x="694" y="0" width="99" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{importo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="54" splitType="Stretch">
-			<textField>
-				<reportElement x="650" y="18" width="80" height="20"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+$V{PAGE_NUMBER}+" di"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement x="730" y="18" width="40" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
+		<band height="54" splitType="Stretch"/>
 	</pageFooter>
 	<lastPageFooter>
 		<band height="50"/>
