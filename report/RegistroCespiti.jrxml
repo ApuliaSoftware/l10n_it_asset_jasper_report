@@ -125,11 +125,15 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="totgfdoammord" class="java.lang.Double" resetType="Group" resetGroup="Categoria" incrementType="Group" incrementGroup="CodeAsset" calculation="Sum">
-		<variableExpression><![CDATA[$F{fi_fdoammord}]]></variableExpression>
+		<variableExpression><![CDATA[$F{fi_fdoammord}+$F{fi_amm_period}]]></variableExpression>
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="totGresdisuo" class="java.lang.Double" resetType="Group" resetGroup="Categoria" incrementType="Group" incrementGroup="CodeAsset" calculation="Sum">
 		<variableExpression><![CDATA[$F{fi_resam}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<variable name="totasset_ifondo" class="java.lang.Double" resetType="Group" resetGroup="CodeAsset">
+		<variableExpression><![CDATA[$F{fi_amm_period}+$F{fi_fdoammord}]]></variableExpression>
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<group name="Categoria" isReprintHeaderOnEachPage="true">
@@ -410,11 +414,6 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 					<textElement/>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{fi_type_amortization}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
-					<reportElement x="568" y="38" width="100" height="12"/>
-					<textElement textAlignment="Right"/>
-					<textFieldExpression class="java.lang.Double"><![CDATA[$F{fi_fdoammord}]]></textFieldExpression>
-				</textField>
 				<textField>
 					<reportElement x="294" y="38" width="100" height="12"/>
 					<textElement textAlignment="Right"/>
@@ -473,6 +472,11 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 						<pen lineWidth="2.5" lineStyle="Double" lineColor="#FF0000"/>
 					</graphicElement>
 				</line>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement x="583" y="38" width="100" height="12"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{totasset_ifondo}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
