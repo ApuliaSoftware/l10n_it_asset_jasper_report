@@ -155,8 +155,8 @@ class asset_journal_wz(osv.osv_memory):
             ('fiscal_year', '=', param.fiscal_year.id)])
         for line in asset_dep_lineobj.browse(cr, uid, id_line_dep):
             asset_dep_lineobj.write(cr, uid, [line.id], {
-                'remaining_value': line.asset_id.purchase_value - line.depreciated_value,
-                'value_residual': line.asset_id.purchase_value
+                'remaining_value':line.asset_id.purchase_value - line.depreciated_value,
+                'value_residual':line.asset_id.purchase_value
             })
             print line.asset_id.code, line.asset_id.purchase_value - line.depreciated_value
 
@@ -171,7 +171,8 @@ class asset_journal_wz(osv.osv_memory):
         param = self.browse(cr, uid, ids[0])
         # asset_obj = self.pool.get('account.asset.asset')
         asset_dep_lineobj = self.pool.get('account.asset.depreciation.line')
-        import pdb;pdb.set_trace()
+        import pdb;
+        pdb.set_trace()
         if not ids:
             return {'type':'ir.actions.act_window_close'}
         if param.fiscal_year.code == '2016':
@@ -525,9 +526,16 @@ class asset_registro_temp(osv.osv_memory):
                 ('fiscal_year', '=', param.fiscal_year.id)])
             # cerca le righe fatture dell'anno selezionato
             id_line_invoice = invoice_lineobj.search(cr, uid, [
-                ('asset_id', '=', asset.id),
-                ('registration_date', '>=', param.fiscal_year.date_start),
-                ('registration_date', '<=', param.fiscal_year.date_stop)])
+                ('asset_id', '=', asset.id), ])
+            # ('registration_date', '>=', param.fiscal_year.date_start),
+            # ('registration_date', '<=', param.fiscal_year.date_stop)])
+            if id_line_invoice:
+                invoice_line_ids = []
+                for line in invoice_lineobj.browse(cr, uid, id_line_invoice):
+                    if line.invoice_id.registration_date >= param.fiscal_year.date_start and \
+                            line.invoice_id.registration_date >= param.fiscal_year.date_stop:
+                        invoice_line_ids.append(line.id)
+                id_line_invoice = invoice_line_ids
             # se entrambe i risultati sono vuoti e non vuole i non movimentati 'print_asset' False
             if not id_line_dep and not id_line_invoice \
                     and not param.not_moved_too:
