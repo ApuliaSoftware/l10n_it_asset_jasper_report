@@ -678,7 +678,7 @@ class asset_registro_temp(osv.osv_memory):
                             mv['move_line_id'] = move_line.id
                             mv['data_reg'] = move_line.date
                             mv['journal_id'] = move_line.journal_id.id
-                            mv['importo'] = move_line.debit
+                            mv['importo'] = move_line.debit-move_line.credit
                             record = testa_rec
                             record.update(mv)
                             self.create(cr, uid, record)
