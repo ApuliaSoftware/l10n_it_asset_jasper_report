@@ -549,6 +549,11 @@ class asset_registro_temp(osv.osv_memory):
                     print_asset = True
                 else:
                     print_asset = False
+                if asset.sale_date < param.fiscal_year.date_start:
+                    print_asset = False
+                else:
+                    print_asset = True
+
             if id_line_dep or id_line_invoice:
                 # va comunque stampato
                 print_asset = True
@@ -572,7 +577,7 @@ class asset_registro_temp(osv.osv_memory):
                     stato = 'ended'
                 if not id_line_dep and stato in ('new', 'doing'):
                     if stato == 'doing':
-                        if not asset.customer_id and asset.remaining_value != 0.0:
+                        if not asset.customer_id and asset.remaining_value > 0.0:
 	                        raise osv.except_osv(_('ERRORE !'),
                                              _(
                                                  'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto\n'+ stato))
