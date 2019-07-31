@@ -545,11 +545,11 @@ class asset_registro_temp(osv.osv_memory):
             # altrimenti quel cespite comunque non esiste in quell' esercizio
             if not id_line_dep and not id_line_invoice \
                     and param.not_moved_too:
-                if asset.purchase_date <= param.fiscal_year.date_stop:
+                if asset.purchase_date and asset.purchase_date <= param.fiscal_year.date_stop:
                     print_asset = True
                 else:
                     print_asset = False
-                if asset.sale_date < param.fiscal_year.date_start:
+                if asset.sale_date and asset.sale_date < param.fiscal_year.date_start:
                     print_asset = False
                 else:
                     print_asset = True
