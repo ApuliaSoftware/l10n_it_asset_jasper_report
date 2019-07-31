@@ -572,7 +572,7 @@ class asset_registro_temp(osv.osv_memory):
                     stato = 'ended'
                 if not id_line_dep and stato in ('new', 'doing'):
                     if stato == 'doing':
-                        if not asset.customer_id:
+                        if not asset.customer_id and asset.remaining_value != 0.0:
 	                        raise osv.except_osv(_('ERRORE !'),
                                              _(
                                                  'al cespite ' + asset.code + ' manca l ammortamento per il periodo richiesto\n'+ stato))
