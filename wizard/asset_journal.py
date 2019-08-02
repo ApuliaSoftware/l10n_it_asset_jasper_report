@@ -545,15 +545,17 @@ class asset_registro_temp(osv.osv_memory):
             # altrimenti quel cespite comunque non esiste in quell' esercizio
             if not id_line_dep and not id_line_invoice \
                     and param.not_moved_too:
+#                if asset.code == 'AS/000016':
+#                   import pdb;pdb.set_trace()
                 if asset.purchase_date and asset.purchase_date <= param.fiscal_year.date_stop:
                     print_asset = True
                 else:
                     print_asset = False
-                if asset.sale_date and asset.sale_date < param.fiscal_year.date_start:
-                    print_asset = False
-                else:
-                    print_asset = True
-
+                if print_asset:
+                    if asset.sale_date and asset.sale_date < param.fiscal_year.date_start:
+                       print_asset = False
+                    else:
+                       print_asset = True
             if id_line_dep or id_line_invoice:
                 # va comunque stampato
                 print_asset = True
@@ -598,6 +600,7 @@ class asset_registro_temp(osv.osv_memory):
                     'deductibility':asset.deductibility,
                     'purchase_date':asset.purchase_date,
                     'purchase_value':asset.purchase_value,
+                    'sale_date': asset.sale_date,
                 }
                 # ora si cerca e calcola i dati iniziali
                 if id_line_dep:
@@ -631,7 +634,7 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['in_perc_amm'] = 0.0
                     testa_rec['in_fdoammord'] = 0.0
                     testa_rec['in_type_amortization'] = ''
-                if line_dep:
+                if line_dep:                    
                     testa_rec['fi_valbene'] = line_dep.value_residual
                     testa_rec['fi_perc_amm'] = line_dep.perc_ammortization
                     testa_rec['fi_amm_period'] = line_dep.amount
@@ -643,6 +646,14 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['fi_perc_amm'] = 0
                     testa_rec['fi_fdoammord'] = asset.accumulated_depreciation
                     testa_rec['fi_type_amortization'] = ''
+                if asset.sale_date:
+	                if asset.sale_date <= param.fiscal_year.date_stop:
+                             testa_rec['fi_valbene'] = 0.0
+                    	     testa_rec['fi_perc_amm'] = 0.0
+                             testa_rec['fi_amm_period'] = 0.0
+                             testa_rec['fi_fdoammord'] = 0.0
+                             testa_rec['fi_type_amortization'] = ''
+                             testa_rec['fi_resam'] = 0.0
                 mv = {}
                 not_write = True
                 if id_line_invoice:
