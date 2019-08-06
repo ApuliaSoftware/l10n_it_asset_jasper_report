@@ -474,7 +474,8 @@ class asset_registro_temp(osv.osv_memory):
                 'in_quoper':fields.float('Quote Perse ini'),
                 'in_resam':fields.float('Residuo da Amm. Ini'),
                 'inv_line_id':fields.many2one('account.invoice.line', 'Riga Fattura'),
-                'move_line_id':fields.many2one('account.move.line', 'Riga Registrazione'),
+                'move_line_id': fields.many2one('account.move.line', 'Riga Registrazione'),
+                'account_id': fields.many2one('account.account', 'Conto'),
                 'data_reg':fields.date('Data Registrazione'),
                 'journal_id':fields.many2one('account.journal', 'Causale'),
                 'partner_id':fields.many2one('res.partner', 'Fornitore / Cliente'),
@@ -662,6 +663,7 @@ class asset_registro_temp(osv.osv_memory):
                         mv = {}
                         mv['inv_line_id'] = line.id
                         mv['move_line_id'] = False
+                        mv['account_id'] = False
                         mv['data_reg'] = line.invoice_id.registration_date
                         mv['data_doc'] = line.invoice_id.date_invoice
                         mv['numdoc'] = line.invoice_id.supplier_invoice_number or line.invoice_id.number
@@ -692,6 +694,7 @@ class asset_registro_temp(osv.osv_memory):
                         if move_line.move_id.period_id.fiscalyear_id.id == param.fiscal_year.id:
                             mv['inv_line_id'] = False
                             mv['move_line_id'] = move_line.id
+                            mv['account_id'] =  move_line.account_id.id
                             mv['data_reg'] = move_line.date
                             mv['journal_id'] = move_line.journal_id.id
                             mv['importo'] = move_line.debit-move_line.credit
