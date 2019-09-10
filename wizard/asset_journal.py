@@ -31,18 +31,18 @@ class asset_journal_wz(osv.osv_memory):
 
     _columns = {'date':fields.date('Print Date', required=True),
                 'fiscal_year':fields.many2one('account.fiscalyear',
-                                              'Period to Print',
+                                              'Anno',
                                               required=True),
                 'asset_type':fields.selection(
                     (('M', 'Material asset'),
                      ('I', 'Intangible asset'),
                      ('P', 'Capital gain'),
                      ('A', 'All')),
-                    'Type'),
+                    'Tipo'),
                 'cat_id':fields.many2one('account.asset.category',
-                                         'Asset Category'),
-                'first_page_number':fields.integer('From Page'),
-                'not_moved_too':fields.boolean('Assets without Moves'),
+                                         'Categoria'),
+                'first_page_number':fields.integer('Ultima Pagina'),
+                'not_moved_too':fields.boolean('Senza movimento'),
                 'lineap_id':fields.many2one('lineap.asset', 'Linea'),
                 'sede_id':fields.many2one('asset.sedi', 'Sede'),
                 }

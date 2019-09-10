@@ -11,6 +11,7 @@
 	</style>
 	<queryString>
 		<![CDATA[SELECT
+  account_fiscalyear.code as Anno,
   account_asset_asset.code,
   account_asset_asset.purchase_value,
   account_asset_asset.ordinary_amortization,
@@ -59,11 +60,13 @@ asset_registro_temp.in_rival,
 FROM
   public.asset_registro_temp LEFT OUTER JOIN public.res_partner ON (asset_registro_temp.partner_id = res_partner.id)
   INNER JOIN public.account_asset_asset ON  (asset_registro_temp.asset_id = account_asset_asset.id)
+  INNER JOIN public.account_fiscalyear ON  (asset_registro_temp.fiscal_year = account_fiscalyear.id)
   INNER JOIN public.account_asset_category ON (asset_registro_temp.category_id = account_asset_category.id)
   LEFT OUTER join public.account_journal on asset_registro_temp.journal_id = account_journal.id
   LEFT OUTER join public.account_account on asset_registro_temp.account_id = account_account.id
 ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_temp.data_reg;]]>
 	</queryString>
+	<field name="anno" class="java.lang.String"/>
 	<field name="code" class="java.lang.String"/>
 	<field name="purchase_value" class="java.lang.Double"/>
 	<field name="ordinary_amortization" class="java.math.BigDecimal"/>
@@ -96,7 +99,7 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 	<field name="fi_amm_period" class="java.lang.Double"/>
 	<field name="in_resam" class="java.lang.Double"/>
 	<field name="in_type_amortization" class="java.lang.String"/>
-	<field name="first_page_number" class="java.lang.Double"/>
+	<field name="first_page_number" class="java.lang.Integer"/>
 	<field name="in_perc_amm" class="java.lang.Double"/>
 	<field name="in_sval" class="java.lang.Double"/>
 	<field name="date" class="java.sql.Date"/>
@@ -608,20 +611,6 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{date}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="663" y="15" width="80" height="20"/>
-				<textElement textAlignment="Right">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+($V{PAGE_NUMBER}+$F{first_page_number})+" di"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement x="743" y="15" width="40" height="20"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[" " + ($V{PAGE_NUMBER}+$F{first_page_number})]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="540" y="15" width="45" height="20"/>
 				<textElement>
@@ -636,10 +625,19 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 				</textElement>
 				<text><![CDATA[LIBRO BENI AMMORTIZZABILI]]></text>
 			</staticText>
-			<textField pattern="###0" isBlankWhenNull="false">
-				<reportElement x="203" y="15" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{variable1}]]></textFieldExpression>
+			<textField>
+				<reportElement x="666" y="15" width="78" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+ $F{anno} + '/']]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="748" y="15" width="51" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}+$F{first_page_number}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
