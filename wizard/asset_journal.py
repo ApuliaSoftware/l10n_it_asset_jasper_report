@@ -494,7 +494,7 @@ class asset_registro_temp(osv.osv_memory):
                 'fi_fdoammant':fields.float('F.do Amm.to Ant. Fin'),
                 'fi_quoper':fields.float('Quate Perse Fin'),
                 'fi_resam':fields.float('Residuo da Amm. Fin'),
-
+				'nota':fields.char('Nota', size=20),
                 }
     _order = "category_id,asset_id,data_reg"
 
@@ -603,6 +603,10 @@ class asset_registro_temp(osv.osv_memory):
                     'purchase_value':asset.purchase_value,
                     'sale_date': asset.sale_date,
                 }
+                if asset.sale_date and asset.sale_date<= param.fiscal_year.date_stop:
+					testa_rec['sale_date'] = asset.sale_date
+				else:
+					testa_rec['sale_date'] = False
                 # ora si cerca e calcola i dati iniziali
                 if id_line_dep:
                     line_dep = asset_dep_lineobj.browse(cr, uid,
@@ -642,6 +646,10 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['fi_fdoammord'] = line_dep.depreciated_value
                     testa_rec['fi_type_amortization'] = line_dep.type_amortization
                     testa_rec['fi_resam'] = line_dep.remaining_value
+                    if line_dep.depreciated_value == asset.value_residual and\
+                        line_dep.remaining_value == 0.0:
+							# il cespite è intereamente ammortizzato nel periodo
+							testa_rec['nota'] = "AMMORTAMENTO FINALE"
                 else:
                     testa_rec['fi_valbene'] = asset.value_residual
                     testa_rec['fi_perc_amm'] = 0
@@ -666,7 +674,10 @@ class asset_registro_temp(osv.osv_memory):
                         mv['account_id'] = False
                         mv['data_reg'] = line.invoice_id.registration_date
                         mv['data_doc'] = line.invoice_id.date_invoice
-                        mv['numdoc'] = line.invoice_id.supplier_invoice_number or line.invoice_id.number
+                        if line.invoice_id.fiscaldoc_id:
+							mv['numdoc'] = line.invoice_id.fiscaldoc_id.name or line.invoice_id.number
+						else:
+							mv['numdoc'] = line.invoice_id.supplier_invoice_number or line.invoice_id.number
                         mv['journal_id'] = line.invoice_id.journal_id.id
                         mv['partner_id'] = line.invoice_id.partner_id.id
                         mv['importo'] = line.price_subtotal
