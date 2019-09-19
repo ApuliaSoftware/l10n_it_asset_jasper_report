@@ -667,7 +667,7 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{journalname}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="181" y="0" width="100" height="12"/>
+				<reportElement x="181" y="0" width="100" height="31" isPrintWhenDetailOverflows="true"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{numdoc}]]></textFieldExpression>
 			</textField>
