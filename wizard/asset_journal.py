@@ -492,7 +492,7 @@ class asset_registro_temp(osv.osv_memory):
                 'fi_fdoammant':fields.float('F.do Amm.to Ant. Fin'),
                 'fi_quoper':fields.float('Quate Perse Fin'),
                 'fi_resam':fields.float('Residuo da Amm. Fin'),
-				'nota':fields.char('Nota', size=20),
+				'nota':fields.char('Nota', size=50),
                 }
     _order = "category_id,asset_id,data_reg"
 
