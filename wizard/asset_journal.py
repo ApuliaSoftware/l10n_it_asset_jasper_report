@@ -297,7 +297,7 @@ class asset_journal_temp(osv.osv_memory):
                         'deductibility':asset.deductibility,
                         'purchase_date':asset.purchase_date,
                         'purchase_value':asset.purchase_value,
-                        'value_residual':line_dep.amount + line_dep.remaining_value,
+                        'value_residual':line_dep.value_residual,  # line_dep.amount + line_dep.remaining_value,
                         # 'asset_value_residual': asset.value_residual,
                         'type_amortization':line_dep.type_amortization,
                         'perc_ammortization':line_dep.perc_ammortization,
@@ -638,8 +638,8 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['in_perc_amm'] = 0.0
                     testa_rec['in_fdoammord'] = 0.0
                     testa_rec['in_type_amortization'] = ''
-                if not asset.sale_date and asset.remaining_value == 0.0:
-                    testa_rec['in_fdoammord'] = asset.accumulated_depreciation
+#                if not asset.sale_date and asset.remaining_value == 0.0:
+#                    testa_rec['in_fdoammord'] = asset.accumulated_depreciation
                 if line_dep:                    
                     testa_rec['fi_valbene'] = line_dep.value_residual
                     testa_rec['fi_perc_amm'] = line_dep.perc_ammortization
