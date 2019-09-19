@@ -145,7 +145,7 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="totasset_ifondo" class="java.lang.Double" resetType="Group" resetGroup="CodeAsset">
-		<variableExpression><![CDATA[$F{fi_amm_period}+$F{fi_fdoammord}]]></variableExpression>
+		<variableExpression><![CDATA[$F{fi_fdoammord}]]></variableExpression>
 		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
 	</variable>
 	<variable name="TotStaValBene" class="java.lang.Double" incrementType="Group" incrementGroup="CodeAsset" calculation="Sum">
