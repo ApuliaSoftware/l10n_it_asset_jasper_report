@@ -48,6 +48,7 @@ asset_registro_temp.in_rival,
        asset_registro_temp.in_perc_amm,
        asset_registro_temp.in_sval,
        asset_registro_temp.date,
+       asset_registro_temp.nota,
        asset_registro_temp.lineap_id, asset_registro_temp.asset_type, asset_registro_temp.not_moved_too,
        asset_registro_temp.ese_disatt, asset_registro_temp.in_fdoammord,
        asset_registro_temp.move_line_id, asset_registro_temp.data_reg,
@@ -103,6 +104,7 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 	<field name="in_perc_amm" class="java.lang.Double"/>
 	<field name="in_sval" class="java.lang.Double"/>
 	<field name="date" class="java.sql.Date"/>
+	<field name="nota" class="java.lang.String"/>
 	<field name="lineap_id" class="java.lang.Integer"/>
 	<field name="asset_type" class="java.lang.String"/>
 	<field name="not_moved_too" class="java.lang.Boolean"/>
@@ -688,6 +690,14 @@ ORDER BY   account_asset_category.name, account_asset_asset.code,asset_registro_
 				<reportElement x="459" y="13" width="234" height="12" isRemoveLineWhenBlank="true"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountname}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<printWhenExpression><![CDATA[!($F{nota}.isEmpty())]]></printWhenExpression>
+			<textField isBlankWhenNull="true">
+				<reportElement x="235" y="13" width="419" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nota}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
