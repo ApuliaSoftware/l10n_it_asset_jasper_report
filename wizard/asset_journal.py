@@ -656,7 +656,9 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['fi_fdoammord'] = asset.accumulated_depreciation
                     testa_rec['fi_type_amortization'] = ''
 		    testa_rec['fi_amm_period'] = 0.0
-                if not asset.sale_date and asset.remaining_value == 0.0:
+                if not asset.sale_date and asset.remaining_value == 0.0 and \
+                    param.fiscal_year.id >= asset.last_use_year.id: # in realtà deve ragionare sulle date ma funziona anche così
+#                    import pdb;pdb.set_trace()
                     testa_rec['fi_fdoammord'] = asset.accumulated_depreciation
                 if asset.sale_date:
 	                if asset.sale_date <= param.fiscal_year.date_stop:
