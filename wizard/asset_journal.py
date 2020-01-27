@@ -647,6 +647,7 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['fi_fdoammord'] = line_dep.depreciated_value
                     testa_rec['fi_type_amortization'] = line_dep.type_amortization
                     testa_rec['fi_resam'] = line_dep.remaining_value
+                    # import pdb;pdb.set_trace()
                     if  line_dep.remaining_value == 0.0:
                         #il cespite è intereamente ammortizzato nel periodo
                         testa_rec['nota'] = "AMMORTAMENTO RESIDUO FINALE"
@@ -657,7 +658,8 @@ class asset_registro_temp(osv.osv_memory):
                     testa_rec['fi_type_amortization'] = ''
 		    testa_rec['fi_amm_period'] = 0.0
                 if not asset.sale_date and asset.remaining_value == 0.0 and \
-                    param.fiscal_year.id >= asset.last_use_year.id: # in realtà deve ragionare sulle date ma funziona anche così
+                    param.fiscal_year.id >= asset.last_use_year.id and \
+                    not testa_rec['nota']: # in realtà deve ragionare sulle date ma funziona anche così
 #                    import pdb;pdb.set_trace()
                     testa_rec['fi_fdoammord'] = asset.accumulated_depreciation
                 if asset.sale_date:
