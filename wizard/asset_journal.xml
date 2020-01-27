@@ -67,6 +67,7 @@
                     <field name="cat_id" />
                     <field name="first_page_number" />
                     <field name="not_moved_too" />
+                    <field name="asset_code" />
                     <field name="asset_id" />
                     <field name="category_id" />
                     <field name="deductibility" />
@@ -93,6 +94,8 @@
             <field name="arch" type="xml">
                 <search string="Ricerca Ammortamenti">
                     <field name="asset_id"  string="Cespite" />
+                    <separator/>
+                    <field name="asset_code"  string="Codice Cespite" />
                     <separator/>
                     <field name="cat_id" string="Categoria" />
               </search>
