@@ -276,7 +276,10 @@ class asset_journal_temp(osv.osv_memory):
             if not id_line_dep and not id_line_invoice \
                     and param.not_moved_too:
                 if asset.purchase_date <= param.fiscal_year.date_stop:
-                    print_asset = True
+                    if asset.first_use_year.date_stop <= param.fiscal_year.date_stop:
+                        print_asset = True
+                    else:
+                        print_asset = False    
                 else:
                     print_asset = False
             if id_line_dep or id_line_invoice:
