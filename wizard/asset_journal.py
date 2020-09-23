@@ -263,6 +263,8 @@ class asset_journal_temp(osv.osv_memory):
         if not ids:
             return False
         for asset in asset_obj.browse(cr, uid, ids):
+#            if asset.code == 'AS/000122':
+#                   import pdb;pdb.set_trace()
             id_line_dep = asset_dep_lineobj.search(cr, uid, [
                 ('asset_id', '=', asset.id),
                 ('fiscal_year', '=', param.fiscal_year.id)])
@@ -276,14 +278,15 @@ class asset_journal_temp(osv.osv_memory):
             if not id_line_dep and not id_line_invoice \
                     and param.not_moved_too:
                 if asset.purchase_date <= param.fiscal_year.date_stop:
-                    if asset.first_use_year.date_stop <= param.fiscal_year.date_stop:
-                        print_asset = True
-                    else:
-                        print_asset = False    
+                    print_asset = True
                 else:
                     print_asset = False
             if id_line_dep or id_line_invoice:
                 print_asset = True
+            if asset.first_use_year.date_stop <= param.fiscal_year.date_stop:
+                print_asset = True
+            else:
+                print_asset = False
             if print_asset:
                 vals = {}
                 if id_line_dep:
